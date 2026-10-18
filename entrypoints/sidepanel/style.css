@@ -1,0 +1,438 @@
+/*
+ * Colours mirror the Droplet app's MUI palette (drplt/src/ui/theme/palette.ts, values from @drplt/color) so the panel
+ * feels native next to the app. Light/dark follow the OS setting.
+ */
+:root {
+  color-scheme: light dark;
+
+  /* background.default / background.paper / border.default */
+  --bg: #f9f9f9;
+  --surface: #ffffff;
+  --border: #e0e0e0;
+  --divider: rgb(0 0 0 / 12%);
+
+  /* text.primary / text.secondary */
+  --text: rgb(0 0 0 / 75%);
+  --muted: rgb(0 0 0 / 55%);
+
+  /* primary: blueberry 400 / 100, hovered = main @ 8%, selected = main @ 12% */
+  --primary: #003ceb;
+  --primary-contrast: #ffffff;
+  --primary-soft: #eef2ff;
+  --primary-hover: rgb(0 60 235 / 8%);
+  --primary-selected: rgb(0 60 235 / 12%);
+  --primary-gradient: linear-gradient(99.05deg, #003ceb 0.49%, #00b6ff 103.6%);
+
+  /* warning: tangerine, error: raspberry */
+  --warning: #be3900;
+  --warning-soft: #fff3e0;
+  --danger: #df005d;
+  --danger-soft: #ffe4f0;
+  --mark: #ffd28a;
+
+  /* background.tooltip: grey 800 */
+  --tooltip-bg: #1d3345;
+  --tooltip-text: #ffffff;
+
+  --disabled-text: rgb(0 0 0 / 26%);
+  --disabled-bg: rgb(0 0 0 / 12%);
+
+  --radius: 8px;
+  --pill: 21px;
+  --font: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: GilroyBold, Gilroy, Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e1b54;
+    --surface: #000235;
+    --border: rgb(255 255 255 / 12%);
+    --divider: rgb(255 255 255 / 12%);
+
+    --text: rgb(255 255 255 / 75%);
+    --muted: rgb(255 255 255 / 55%);
+
+    /* primary: sapphire 400 / 100 */
+    --primary: #00b6ff;
+    --primary-contrast: #000235;
+    --primary-soft: #14376e;
+    --primary-hover: rgb(0 182 255 / 8%);
+    --primary-selected: rgb(0 182 255 / 12%);
+
+    --warning: #ffd28a;
+    --warning-soft: #7f2600;
+    --danger: #ff6daa;
+    --danger-soft: #5c0026;
+    --mark: #7f2600;
+
+    --tooltip-bg: #e1e8ee;
+    --tooltip-text: #000235;
+
+    --disabled-text: rgb(255 255 255 / 30%);
+    --disabled-bg: rgb(255 255 255 / 12%);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.45 var(--font);
+}
+
+.app,
+.empty {
+  padding: 12px 16px 24px;
+}
+
+.empty {
+  text-align: center;
+  padding-top: 48px;
+}
+
+.empty h2 {
+  font: 700 18px/1.2 var(--font-heading);
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.empty p {
+  color: var(--muted);
+  margin: 0 0 16px;
+}
+
+/* Tool switcher: segmented control in Droplet's primary blue. */
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--pill);
+  margin-bottom: 16px;
+}
+
+.tabs__tab {
+  flex: 1;
+  border: 0;
+  border-radius: var(--pill);
+  padding: 6px 8px;
+  background: transparent;
+  color: var(--muted);
+  font: 600 14px/1.3 var(--font);
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+.tabs__tab:hover {
+  background: var(--primary-hover);
+}
+
+.tabs__tab[aria-selected='true'] {
+  background: var(--primary-gradient);
+  color: #ffffff;
+}
+
+.stack,
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.field {
+  gap: 4px;
+}
+
+.field label {
+  font-weight: 600;
+}
+
+.hint {
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.input-row {
+  display: flex;
+  gap: 8px;
+}
+
+input[type='search'],
+select {
+  flex: 1;
+  min-width: 0;
+  min-height: 38px;
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+
+input[type='search']:hover,
+select:hover {
+  border-color: var(--muted);
+}
+
+input:focus-visible,
+select:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+input[type='checkbox'] {
+  accent-color: var(--primary);
+}
+
+.checkbox {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  color: var(--text);
+}
+
+.checkbox__hint {
+  display: block;
+}
+
+/* Buttons follow the app's MUI overrides: pill radius, capitalised labels, 0.5px tracking. */
+.button {
+  padding: 7px 18px;
+  border: 0;
+  border-radius: var(--pill);
+  background: var(--primary);
+  color: var(--primary-contrast);
+  font: 600 14px/1.3 var(--font);
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow:
+    0 1px 5px 0 rgb(0 0 0 / 12%),
+    0 2px 2px 0 rgb(0 0 0 / 14%),
+    0 3px 1px -2px rgb(0 0 0 / 20%);
+}
+
+.button:hover {
+  filter: brightness(1.1);
+}
+
+.button:disabled,
+.button[aria-disabled='true'] {
+  background: var(--disabled-bg);
+  color: var(--disabled-text);
+  box-shadow: none;
+  filter: none;
+  cursor: not-allowed;
+}
+
+.button--small {
+  padding: 4px 12px;
+  font-size: 12px;
+}
+
+.button--quiet {
+  background: transparent;
+  color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.button--quiet:hover {
+  background: var(--primary-hover);
+  filter: none;
+}
+
+.button--quiet:disabled {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--disabled-bg);
+}
+
+.status {
+  margin-top: 16px;
+}
+
+.status__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.status__bar {
+  width: 100%;
+  height: 6px;
+  accent-color: var(--primary);
+}
+
+.notice {
+  margin: 12px 0 0;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  background: var(--primary-soft);
+  color: var(--text);
+}
+
+.notice--error {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.notice--warning {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.notice ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+
+.results {
+  margin-top: 16px;
+}
+
+.results__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--muted);
+  min-height: 24px;
+}
+
+.result-list,
+.match-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.result {
+  padding: 12px;
+  margin-top: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.result__title {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  align-items: baseline;
+}
+
+.result__title strong {
+  font-family: var(--font-heading);
+  font-weight: 700;
+}
+
+.match-list {
+  margin: 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.match-list__location {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.snippet {
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  quotes: none;
+}
+
+mark {
+  background: var(--mark);
+  color: inherit;
+  border-radius: 2px;
+}
+
+.badge {
+  padding: 1px 8px;
+  border-radius: var(--pill);
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.tag {
+  padding: 0 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.tag--published {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.tag--draft {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* Tooltip: shown on hover or keyboard focus; styled like MUI's (background.tooltip). */
+.tooltip {
+  position: relative;
+  display: inline-flex;
+}
+
+.tooltip__bubble {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  z-index: 10;
+  width: max-content;
+  max-width: 240px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: var(--tooltip-bg);
+  color: var(--tooltip-text);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.35;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 120ms ease-in;
+}
+
+.tooltip:hover .tooltip__bubble,
+.tooltip:focus-within .tooltip__bubble {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 300ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tooltip__bubble {
+    transition: none;
+  }
+}

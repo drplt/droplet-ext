@@ -1,0 +1,22 @@
+/* Highlight uses Droplet's primary blue (blueberry 400, #003CEB). */
+@keyframes droplet-ext-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 2px rgb(0 60 235 / 90%);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgb(0 60 235 / 30%);
+  }
+}
+
+.droplet-ext-highlight {
+  animation: droplet-ext-pulse 1s ease-in-out 3;
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .droplet-ext-highlight {
+    animation: none;
+    box-shadow: 0 0 0 3px rgb(0 60 235 / 90%);
+  }
+}

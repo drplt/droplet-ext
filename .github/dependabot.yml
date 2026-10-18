@@ -1,0 +1,20 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    groups:
+      lint:
+        patterns: ['eslint*', '@eslint/*', 'typescript-eslint', 'prettier', 'globals']
+      test:
+        patterns: ['vitest', '@vitest/*', '@testing-library/*', 'jsdom']
+      react:
+        patterns: ['react', 'react-dom', '@types/react', '@types/react-dom']
+      wxt:
+        patterns: ['wxt', '@wxt-dev/*', 'vite', 'web-ext']
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

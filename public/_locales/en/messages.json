@@ -1,0 +1,271 @@
+{
+  "extName": {
+    "message": "Droplet Admin Extension",
+    "description": "Extension name shown in the store and browser."
+  },
+  "extShortName": {
+    "message": "Droplet Admin"
+  },
+  "extDescription": {
+    "message": "Search text across your Droplet forms and datasets, and find any object by its ID, from a side panel.",
+    "description": "Store / manifest description (max 132 chars)."
+  },
+  "actionTitle": {
+    "message": "Open Droplet Admin Extension"
+  },
+  "tabFindText": {
+    "message": "Find text"
+  },
+  "tabFindById": {
+    "message": "Find by ID"
+  },
+  "searchInLabel": {
+    "message": "Search in"
+  },
+  "targetForms": {
+    "message": "Forms"
+  },
+  "targetDatasets": {
+    "message": "Datasets"
+  },
+  "fromCurrentPage": {
+    "message": "from current page"
+  },
+  "searchTextLabel": {
+    "message": "Text to find"
+  },
+  "searchTextPlaceholder": {
+    "message": "e.g. patient name"
+  },
+  "searchButton": {
+    "message": "Search"
+  },
+  "includeDraftsLabel": {
+    "message": "Include unpublished drafts"
+  },
+  "includeDraftsHint": {
+    "message": "Also searches each item's newest draft, alongside its published version."
+  },
+  "idLabel": {
+    "message": "Object ID"
+  },
+  "idPlaceholder": {
+    "message": "e.g. Yrobox or 12345"
+  },
+  "findButton": {
+    "message": "Find"
+  },
+  "cancelButton": {
+    "message": "Cancel"
+  },
+  "clearButton": {
+    "message": "Clear results"
+  },
+  "progress": {
+    "message": "Searched $DONE$ of $TOTAL$",
+    "placeholders": {
+      "done": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "preparing": {
+    "message": "Gathering objects…"
+  },
+  "lookingUp": {
+    "message": "Checking every object type…"
+  },
+  "resultsSummary": {
+    "message": "Found in $COUNT$ of $TOTAL$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "noTextMatches": {
+    "message": "No matches found."
+  },
+  "noIdMatches": {
+    "message": "No object with that ID was found."
+  },
+  "cancelled": {
+    "message": "Search cancelled. Showing results found so far."
+  },
+  "matchCount": {
+    "message": "$COUNT$ matches",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "moreMatches": {
+    "message": "+ $COUNT$ more",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "versionPublished": {
+    "message": "Published"
+  },
+  "versionDraft": {
+    "message": "Draft"
+  },
+  "versionTitle": {
+    "message": "Version $VERSION$",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "itemErrors": {
+    "message": "$COUNT$ could not be searched",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "skippedUnpublished": {
+    "message": "$COUNT$ never published, so not searched. Turn on “Include unpublished drafts” to include them.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "forbiddenTypes": {
+    "message": "You don't have access to check: $TYPES$",
+    "placeholders": {
+      "types": {
+        "content": "$1"
+      }
+    }
+  },
+  "actionShow": {
+    "message": "Show"
+  },
+  "actionShowTitle": {
+    "message": "Highlight it on this page, or go to it in this tab"
+  },
+  "actionShowNewTabTitle": {
+    "message": "A search is running in this tab, so this opens a new tab"
+  },
+  "actionShowUnavailable": {
+    "message": "Can't show this here — switch to the $PAGE$ page, or use “Open in new tab”.",
+    "placeholders": {
+      "page": {
+        "content": "$1"
+      }
+    }
+  },
+  "pageForms": {
+    "message": "Forms"
+  },
+  "pageDatasets": {
+    "message": "Datasets"
+  },
+  "pageSubmissions": {
+    "message": "Submissions"
+  },
+  "pageEsign": {
+    "message": "eSign"
+  },
+  "pagePackets": {
+    "message": "Packets"
+  },
+  "pageClients": {
+    "message": "Clients"
+  },
+  "pageEmployees": {
+    "message": "Employees"
+  },
+  "pageRoles": {
+    "message": "Roles"
+  },
+  "pageTags": {
+    "message": "Tags"
+  },
+  "pageAccounts": {
+    "message": "Accounts"
+  },
+  "actionOpen": {
+    "message": "Open in new tab"
+  },
+  "typeForm": {
+    "message": "Form"
+  },
+  "typeDataset": {
+    "message": "Dataset"
+  },
+  "typeSubmission": {
+    "message": "Submission"
+  },
+  "typeEsignSubmission": {
+    "message": "eSign submission"
+  },
+  "typeEsignTemplate": {
+    "message": "eSign template"
+  },
+  "typePacket": {
+    "message": "Packet"
+  },
+  "typePacketTemplate": {
+    "message": "Packet template"
+  },
+  "typeClient": {
+    "message": "Client"
+  },
+  "typeEmployee": {
+    "message": "Employee"
+  },
+  "typeRole": {
+    "message": "Role"
+  },
+  "typeTag": {
+    "message": "Tag"
+  },
+  "typeAccount": {
+    "message": "Account"
+  },
+  "notOnDropletTitle": {
+    "message": "Open Droplet to get started"
+  },
+  "notOnDropletBody": {
+    "message": "The Droplet Admin Extension works on the Droplet web app. Switch to a Droplet tab, or open one now."
+  },
+  "openDroplet": {
+    "message": "Open Droplet"
+  },
+  "errorNotDroplet": {
+    "message": "This tab isn't showing Droplet."
+  },
+  "errorReloadTab": {
+    "message": "Reload this Droplet tab, then try again."
+  },
+  "errorPageReloaded": {
+    "message": "The page reloaded, which stopped the search. Run it again to continue."
+  },
+  "errorUnauthorized": {
+    "message": "Your Droplet session has ended. Sign in again in this tab, then retry."
+  },
+  "errorForbidden": {
+    "message": "Your Droplet role doesn't allow this. Ask an administrator for Build access."
+  },
+  "errorNetwork": {
+    "message": "Could not reach Droplet. Check your connection and try again."
+  },
+  "errorUnexpected": {
+    "message": "Something went wrong. Please try again."
+  }
+}

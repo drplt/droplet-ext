@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Lint, typecheck, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm format:check
+      - run: pnpm typecheck
+      - run: pnpm test:coverage
+      - run: pnpm audit --prod
+
+      - name: Build store packages
+        run: pnpm zip:all
+      - name: Validate Firefox package
+        run: pnpm lint:firefox
+      - name: Production manifests must not reference internal hosts
+        run: |
+          for manifest in .output/chrome-mv3/manifest.json .output/firefox-mv3/manifest.json; do
+            if grep -Eq 'localhost|demo1|dev1|dr1|stage\.' "$manifest"; then
+              echo "::error file=$manifest::Internal host found in production manifest"
+              exit 1
+            fi
+          done
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: extension-packages
+          path: .output/*.zip
+          retention-days: 14

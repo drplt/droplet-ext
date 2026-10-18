@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Build output
+.output/
+.wxt/
+coverage/
+web-ext-artifacts/
+*.zip
+
+# Signing keys and credentials — never commit these
+*.pem
+*.crx
+*.xpi
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+*.log
+.vscode/*
+!.vscode/extensions.json
+.idea/
