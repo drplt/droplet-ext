@@ -17,7 +17,7 @@ The extension is public: anyone can install it, and it works with whatever acces
 
 ## Getting started
 
-Requirements: Node `22.22.3` (see `.nvmrc`) and pnpm 10.
+Requirements: Node `24.22.1` (see `.nvmrc`) and pnpm 10.
 
 Global npm packages are installed per Node version under nvm. So the first time you switch to this project's Node version, install pnpm for it:
 
