@@ -6,6 +6,13 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+### Added
+
+- **Compare**: see what changed between two versions of a form. JSON documents are compared by structure and the
+  layout component by component, so reformatting is ignored and a field dragged to another section is reported as
+  moved, and workflow canvas positions are left out. The form defaults from the current page and the versions default to published → newest.
+- **Open report** shows a comparison in its own window, where it can be saved as a PDF or downloaded as a CSV.
+
 ## [0.1.0] - 2026-10-17
 
 ### Added

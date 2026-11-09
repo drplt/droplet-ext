@@ -1,14 +1,18 @@
 # Droplet Admin Extension
 
-A browser extension for **Chrome** and **Firefox** that adds a side panel to the [Droplet](https://droplet.io) web app with two tools:
+A browser extension for **Chrome** and **Firefox** that adds a side panel to the [Droplet](https://droplet.io) web app with three tools:
 
 - **Find text.** Search every form or dataset in your organization for a piece of text (`findStringInObj`).
   - The object type is picked from the page you're on (`/forms` → Forms, `/datasets` → Datasets), and you can change it with a dropdown.
   - Form search covers layout, workflow, visibility, attributes, datasets, notifications, integrations, translations and tags.
   - Dataset search covers every value, labelled by row and column.
 - **Find by ID.** Paste any ID and see what it is (`findObjById`): a form, dataset, submission, eSign template or submission, packet, packet template, client, employee, role, tag or account.
+- **Compare.** Pick two versions of a form and see what changed between them, section by section.
+  - The form is taken from the page you're on (`/forms/:id/edit`), or you can paste a form ID.
+  - It starts on the usual question, published version → newest version, and any two versions can be chosen.
+  - **Open report** shows the full comparison in its own window, with **Save as PDF** and **Download CSV**.
 
-Every result has two buttons:
+Every search and lookup result has two buttons:
 
 - **Show** highlights the item if it's visible on the current page, and otherwise opens it in this tab.
 - **Open in new tab ↗** opens it in a new tab.
@@ -88,6 +92,20 @@ On Firefox the content script uses `content.fetch` so that requests go out as th
 
 **Find by ID.** Droplet IDs are hashids salted per object type, so an ID alone doesn't say what it is. `lib/lookup/objById.ts` tries every `getById` route in parallel and reports each one that resolves. Submission routes are only tried for numeric IDs.
 
+**Comparing versions.** The API returns each document of a form version as text: the layout as JSX, everything else as JSON. Comparing that text directly would mostly report formatting, so `lib/compare` compares what the text means.
+
+- **JSON documents** (workflow, visibility, attributes, …) are parsed and compared by structure. Key order and whitespace never count. Each change is reported by its path, such as `start › permissions › employeeName`. List items are aligned first, so inserting one item is reported as one addition.
+- **The layout** is parsed into its component tree. A component with an `id` is followed wherever it goes, so dragging a field into another section is reported as _Moved_, along with anything that changed inside it. A component without an `id` is matched to the most similar sibling of the same kind. Reformatting alone reports nothing.
+- A document that can't be parsed is compared line by line instead, and the result says so.
+- Where a step sits on the workflow canvas (`position`) is ignored: it doesn't affect how the form behaves.
+
+**The report window** (`entrypoints/report`) is an extension page opened as a popup window. It reads the comparison from the tab's job in `storage.session`, so opening it needs no extra permission and makes no API calls.
+
+- **Save as PDF** opens the browser's print dialog, where "Save as PDF" is a destination. The page has print styles for this.
+- **Download CSV** writes one row per change. Cells that a spreadsheet would run as a formula are prefixed with an apostrophe.
+
+Listing a form's versions needs the **View** permission on forms; reading the versions themselves needs **Build**.
+
 ### Project layout
 
 ```
@@ -95,11 +113,13 @@ entrypoints/
   background.ts          relay + per-tab job state, toolbar → side panel
   droplet.content/       runs jobs in the Droplet tab; "show on page" highlight
   sidepanel/             React UI (App, components/, hooks/)
+  report/                the comparison report window: PDF (print) and CSV export
 lib/
   api.ts                 fetch wrapper: envelope parsing, typed ApiError, 401 renew + retry
   env.ts, hosts.ts       app ↔ API origin mapping; host match patterns
   search/                findStringInObj: run.ts (runner), forms.ts, datasets.ts, match.ts
   lookup/objById.ts      findObjById
+  compare/               form version comparison: versions.ts (API), documents.ts, json.ts, layout.ts, jsx.ts
   targets.ts             registry of searchable types (add new ones here)
   routes.ts              object type → Droplet app URL
   schemas.ts             zod schemas for the API responses we read
@@ -129,11 +149,11 @@ The host lists live in `lib/hosts.ts`. CI fails if a production manifest mention
 
 These justifications can be reused in store submissions.
 
-| Permission                                   | Why                                                                                                                                                                    |
-| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `host_permissions: https://app.droplet.io/*` | Runs the content script that performs searches in the user's own Droplet session, and lets the side panel read the active tab's URL to choose the default object type. |
-| `storage`                                    | Remembers the last selected object type (`storage.local`) and keeps the current tab's results while the browser is open (`storage.session`).                           |
-| `sidePanel` (Chrome only)                    | Shows the tools in Chrome's side panel. Firefox uses `sidebar_action`, which needs no permission.                                                                      |
+| Permission                                   | Why                                                                                                                                                                                                         |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `host_permissions: https://app.droplet.io/*` | Runs the content script that performs searches in the user's own Droplet session, and lets the side panel read the active tab's URL to choose the default object type.                                      |
+| `storage`                                    | Remembers the last selected object type (`storage.local`) and keeps the current tab's results while the browser is open (`storage.session`), which is also where the report window reads a comparison from. |
+| `sidePanel` (Chrome only)                    | Shows the tools in Chrome's side panel. Firefox uses `sidebar_action`, which needs no permission.                                                                                                           |
 
 There is no `cookies` permission, no `tabs` permission, no remote code and no analytics.
 

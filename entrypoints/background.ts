@@ -3,13 +3,11 @@ import type { Browser } from 'wxt/browser';
 import type { ContentMessage, JobEvent, JobState, PanelCommand, PanelUpdate } from '@/lib/messages';
 
 import { isDropletAppUrl } from '@/lib/env';
-import { applyJobEvent, createJob, interruptJob } from '@/lib/jobState';
+import { applyJobEvent, createJob, interruptJob, jobStorageKey as jobKey } from '@/lib/jobState';
 import { PANEL_PORT } from '@/lib/messages';
 
 // Per-tab job state lives in storage.session: it survives the service worker being suspended and the panel being
 // closed, and is cleared when the browser exits.
-const jobKey = (tabId: number) => `session:job:${tabId}` as const;
-
 const readJob = (tabId: number) => storage.getItem<JobState>(jobKey(tabId));
 
 const ports = new Map<Browser.runtime.Port, Set<number>>();

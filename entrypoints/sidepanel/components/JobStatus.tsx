@@ -11,11 +11,13 @@ const JobStatus = ({ job, onCancel }: Props) => {
   if (job.status !== 'running') return null;
   const { progress } = job;
   const label =
-    job.request.kind === 'findById'
-      ? t('lookingUp')
-      : progress
-        ? t('progress', [progress.done, progress.total])
-        : t('preparing');
+    job.request.kind === 'compareVersions'
+      ? t('comparing')
+      : job.request.kind === 'findById'
+        ? t('lookingUp')
+        : progress
+          ? t('progress', [progress.done, progress.total])
+          : t('preparing');
 
   return (
     <div className="status" role="status" aria-live="polite">

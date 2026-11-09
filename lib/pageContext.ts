@@ -11,4 +11,11 @@ const getTargetFromUrl = (pageUrl: string | undefined): null | SearchTargetType 
   return null;
 };
 
-export { getTargetFromUrl };
+/** The form the page is about, e.g. /forms/abc123/edit or /form/abc123/submission/9 → abc123. */
+const getFormIdFromUrl = (pageUrl: string | undefined): null | string => {
+  if (!getDropletEnv(pageUrl) || !pageUrl) return null;
+  const [first, id] = new URL(pageUrl).pathname.split('/').filter(Boolean);
+  return (first === 'forms' || first === 'form') && id ? decodeURIComponent(id) : null;
+};
+
+export { getFormIdFromUrl, getTargetFromUrl };

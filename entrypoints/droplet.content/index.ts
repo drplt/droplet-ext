@@ -1,6 +1,7 @@
-import type { ContentMessage, JobEvent, JobFailure, JobRequest } from '@/lib/messages';
+import type { ContentMessage, FormVersionsReply, JobEvent, JobFailure, JobRequest } from '@/lib/messages';
 
 import { ApiError, createApiClient } from '@/lib/api';
+import { compareFormVersions, listFormVersions } from '@/lib/compare/versions';
 import { getDropletEnv } from '@/lib/env';
 import { findObjById } from '@/lib/lookup/objById';
 import { runSearch } from '@/lib/search/run';
@@ -47,7 +48,9 @@ export default defineContentScript({
       running.set(jobId, controller);
       const { signal } = controller;
       try {
-        if (request.kind === 'findById') {
+        if (request.kind === 'compareVersions') {
+          emit({ type: 'job:comparison', jobId, comparison: await compareFormVersions(api, request, signal) });
+        } else if (request.kind === 'findById') {
           emit({ type: 'job:lookup', jobId, lookup: await findObjById(api, request.id, signal) });
         } else {
           await runSearch({
@@ -84,7 +87,13 @@ export default defineContentScript({
       }
     };
 
-    const handle = (message: ContentMessage) => {
+    const loadFormVersions = (formId: string): Promise<FormVersionsReply> =>
+      listFormVersions(api, formId).then(
+        form => ({ ok: true, form }),
+        (error: unknown) => ({ ok: false, error: toFailure(error) }),
+      );
+
+    const handle = (message: Exclude<ContentMessage, { type: 'form:versions' }>) => {
       switch (message.type) {
         case 'job:start':
           void runJob(message.jobId, message.request);
@@ -99,9 +108,15 @@ export default defineContentScript({
       }
     };
 
-    // Every reply is synchronous, so answer via sendResponse (portable across Chrome and Firefox).
+    // Answer via sendResponse (portable across Chrome and Firefox). Returning true keeps the channel open for the
+    // one reply that needs the API first.
     const onMessage = (message: ContentMessage, _sender: unknown, sendResponse: (response: unknown) => void) => {
+      if (message.type === 'form:versions') {
+        void loadFormVersions(message.formId).then(sendResponse);
+        return true;
+      }
       sendResponse(handle(message));
+      return undefined;
     };
 
     browser.runtime.onMessage.addListener(onMessage);

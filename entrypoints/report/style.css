@@ -1,0 +1,145 @@
+/* The report window. Builds on the side panel's palette and components (../sidepanel/style.css). */
+.report {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.report h1 {
+  font: 700 22px/1.2 var(--font-heading);
+  margin: 0 0 4px;
+}
+
+.report h2 {
+  font: 700 16px/1.3 var(--font-heading);
+  margin: 28px 0 8px;
+}
+
+.report p {
+  margin: 4px 0;
+}
+
+.report__header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.report__actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* The header buttons sit at the right edge, so their tooltip opens leftwards and below. */
+.report__actions .tooltip__bubble {
+  top: calc(100% + 6px);
+  bottom: auto;
+  right: 0;
+  left: auto;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  background: var(--surface);
+}
+
+.report-table--narrow {
+  width: auto;
+  table-layout: auto;
+}
+
+.report-table th,
+.report-table td {
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.report-table thead td {
+  border: 0;
+  background: var(--bg);
+}
+
+.report-table th {
+  font-weight: 600;
+}
+
+.report-table--changes th:first-child {
+  width: 96px;
+}
+
+.report-table--changes th:nth-child(2) {
+  width: 26%;
+}
+
+.report-table__where {
+  overflow-wrap: anywhere;
+}
+
+.report-table pre {
+  margin: 0;
+  font:
+    12px/1.45 ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.report-table__before {
+  background: var(--danger-soft);
+}
+
+.report-table__after {
+  background: var(--success-soft);
+}
+
+/* Printing (and so "Save as PDF") always uses the light palette, without the buttons. */
+@media print {
+  :root {
+    color-scheme: light;
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --border: #d0d4dc;
+    --text: #1d2433;
+    --muted: #5b6475;
+    --primary: #003ceb;
+    --primary-soft: #eef2ff;
+    --warning: #be3900;
+    --warning-soft: #fff3e0;
+    --danger: #df005d;
+    --danger-soft: #ffe4f0;
+    --success: #1a7f37;
+    --success-soft: #e3f6e8;
+  }
+
+  .report {
+    max-width: none;
+    padding: 0;
+  }
+
+  .report__actions {
+    display: none;
+  }
+
+  .report h2 {
+    break-after: avoid;
+  }
+
+  .report-table tr {
+    break-inside: avoid;
+  }
+
+  .report-table td,
+  .tag {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

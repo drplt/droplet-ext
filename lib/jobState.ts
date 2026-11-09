@@ -1,6 +1,9 @@
 // Pure state transitions for a tab's current job, shared by the background (source of truth) and tests.
 import type { JobEvent, JobRequest, JobState } from './messages';
 
+/** Where the background keeps a tab's job in storage.session. The report window reads it from there. */
+const jobStorageKey = (tabId: number) => `session:job:${tabId}` as const;
+
 const createJob = (jobId: string, request: JobRequest, now: number): JobState => ({
   jobId,
   request,
@@ -12,6 +15,7 @@ const createJob = (jobId: string, request: JobRequest, now: number): JobState =>
   itemErrors: [],
   skipped: [],
   lookup: null,
+  comparison: null,
   error: null,
 });
 
@@ -28,6 +32,8 @@ const applyJobEvent = (job: JobState | null, event: JobEvent, now: number): JobS
       return { ...job, skipped: [...job.skipped, event.item] };
     case 'job:itemError':
       return { ...job, itemErrors: [...job.itemErrors, event.error] };
+    case 'job:comparison':
+      return { ...job, comparison: event.comparison };
     case 'job:lookup':
       return { ...job, lookup: event.lookup };
     case 'job:failed':
@@ -41,4 +47,4 @@ const applyJobEvent = (job: JobState | null, event: JobEvent, now: number): JobS
 const interruptJob = (job: JobState | null, message: string, now: number): JobState | null =>
   job?.status === 'running' ? { ...job, status: 'error', error: { kind: 'other', message }, finishedAt: now } : job;
 
-export { applyJobEvent, createJob, interruptJob };
+export { applyJobEvent, createJob, interruptJob, jobStorageKey };

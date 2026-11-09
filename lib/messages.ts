@@ -5,11 +5,13 @@
 //
 // Jobs run in the Droplet tab's content script so API calls are first-party requests that carry the user's
 // session cookie. The background owns per-tab job state so the panel can close and reopen without losing it.
+import type { FormVersions, VersionComparison } from './compare/types';
 import type { LookupResult } from './lookup/objById';
 import type { SearchItemError, SearchProgress, SkippedItem } from './search/run';
 import type { SearchHit, SearchOptions, SearchTargetType } from './search/types';
 
 type JobRequest =
+  | { formId: string; from: string; kind: 'compareVersions'; to: string }
   | { kind: 'findById'; id: string }
   | { kind: 'findText'; options: SearchOptions; query: string; target: SearchTargetType };
 
@@ -19,6 +21,7 @@ type JobFailure = {
 };
 
 type JobState = {
+  comparison: null | VersionComparison;
   error: JobFailure | null;
   finishedAt: null | number;
   hits: SearchHit[];
@@ -37,10 +40,15 @@ type ContentMessage =
   | { jobId: string; request: JobRequest; type: 'job:start' }
   | { jobId: string; type: 'job:cancel' }
   | { jobId: string; type: 'job:ping' }
-  | { id: string; objectType: string; type: 'page:reveal' };
+  | { id: string; objectType: string; type: 'page:reveal' }
+  | { formId: string; type: 'form:versions' };
+
+/** Content script's reply to "form:versions". Unlike a job it's answered directly, since it only fills a dropdown. */
+type FormVersionsReply = { error: JobFailure; ok: false } | { form: FormVersions; ok: true };
 
 /** Content script → background. */
 type JobEvent =
+  | { comparison: VersionComparison; jobId: string; type: 'job:comparison' }
   | { error: JobFailure; jobId: string; type: 'job:failed' }
   | { error: SearchItemError; jobId: string; type: 'job:itemError' }
   | { hit: SearchHit; jobId: string; type: 'job:hit' }
@@ -64,6 +72,7 @@ const PANEL_PORT = 'panel';
 
 export {
   type ContentMessage,
+  type FormVersionsReply,
   type JobEvent,
   type JobFailure,
   type JobRequest,
