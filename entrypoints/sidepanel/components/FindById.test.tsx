@@ -19,6 +19,7 @@ const jobWith = (lookup: JobState['lookup']): JobState => ({
   itemErrors: [],
   skipped: [],
   lookup,
+  comparison: null,
   error: null,
 });
 

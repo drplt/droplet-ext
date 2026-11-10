@@ -22,6 +22,10 @@ preview.
 **Find by ID** — Paste any ID and instantly see whether it's a form, dataset, submission, eSign document, packet,
 client, employee, role, tag or account.
 
+**Compare** — Choose two versions of a form and see exactly what changed: which fields were added, removed, moved or
+edited, and what changed in the workflow, visibility, notifications and other settings. Open the comparison as a
+report and save it as a PDF or CSV to share.
+
 Jump straight to any result on the current page, or open it in a new tab.
 
 The Droplet Admin Extension works with your existing Droplet sign-in and respects your role's permissions. It does not collect
@@ -46,5 +50,5 @@ Publish `PRIVACY.md` at a public URL (e.g. https://droplet.io/legal/browser-exte
 ## Assets checklist
 
 - [x] Icon: `store/store-icon-128.png` (96px Droplet mark padded to 128 per Chrome Web Store guidelines); 512px in `store/icon-512.png`. Rendered from the app's favicon, `drplt/src/ui/public/images/logos/droplet.svg` (copy in `store/droplet-logo.svg`)
-- [ ] Screenshots 1280×800: Find text (forms), Find text (datasets), Find by ID
+- [ ] Screenshots 1280×800: Find text (forms), Find text (datasets), Find by ID, Compare
 - [ ] Small promo tile 440×280 (Chrome)

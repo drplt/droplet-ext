@@ -3,16 +3,18 @@ import { useState } from 'react';
 import { isDropletAppUrl } from '@/lib/env';
 import { t } from '@/lib/i18n';
 
+import { CompareVersions } from './components/CompareVersions';
 import { FindById } from './components/FindById';
 import { FindText } from './components/FindText';
 import { useActiveTab } from './hooks/useActiveTab';
 import { useJob } from './hooks/useJob';
 
-type Tool = 'findById' | 'findText';
+type Tool = 'compareVersions' | 'findById' | 'findText';
 
 const TOOLS: { key: Tool; label: () => string }[] = [
   { key: 'findText', label: () => t('tabFindText') },
   { key: 'findById', label: () => t('tabFindById') },
+  { key: 'compareVersions', label: () => t('tabCompare') },
 ];
 
 const DROPLET_HOME = 'https://app.droplet.io/';
@@ -67,8 +69,10 @@ const App = () => {
       <div id={`panel-${tool}`} role="tabpanel" aria-labelledby={`tab-${tool}`} className="panel">
         {tool === 'findText' ? (
           <FindText key={tab.id} tab={tab} job={job} onStart={start} onCancel={cancel} onClear={clear} />
-        ) : (
+        ) : tool === 'findById' ? (
           <FindById key={tab.id} tab={tab} job={job} onStart={start} onCancel={cancel} />
+        ) : (
+          <CompareVersions key={tab.id} tab={tab} job={job} onStart={start} onCancel={cancel} onClear={clear} />
         )}
       </div>
     </main>

@@ -238,6 +238,171 @@
   "typeAccount": {
     "message": "Account"
   },
+  "tabCompare": {
+    "message": "Compare"
+  },
+  "compareFormIdLabel": {
+    "message": "Form ID"
+  },
+  "compareFormIdPlaceholder": {
+    "message": "e.g. Yrobox"
+  },
+  "compareLoadButton": {
+    "message": "Load"
+  },
+  "compareLoading": {
+    "message": "Loading versions…"
+  },
+  "compareFromLabel": {
+    "message": "Old version"
+  },
+  "compareToLabel": {
+    "message": "New version"
+  },
+  "compareButton": {
+    "message": "Compare versions"
+  },
+  "compareSameVersion": {
+    "message": "Choose two different versions."
+  },
+  "compareOneVersion": {
+    "message": "This form has only one version, so there is nothing to compare."
+  },
+  "comparing": {
+    "message": "Comparing versions…"
+  },
+  "compareHeading": {
+    "message": "$FROM$ → $TO$",
+    "placeholders": {
+      "from": {
+        "content": "$1"
+      },
+      "to": {
+        "content": "$2"
+      }
+    }
+  },
+  "compareIdentical": {
+    "message": "These two versions are identical."
+  },
+  "compareUnchanged": {
+    "message": "No changes in: $FIELDS$",
+    "placeholders": {
+      "fields": {
+        "content": "$1"
+      }
+    }
+  },
+  "compareTextMode": {
+    "message": "This document's structure couldn't be read, so it was compared line by line."
+  },
+  "changeCount": {
+    "message": "$COUNT$ changes",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "changeCountOne": {
+    "message": "1 change"
+  },
+  "changeAdded": {
+    "message": "Added"
+  },
+  "changeRemoved": {
+    "message": "Removed"
+  },
+  "changeChanged": {
+    "message": "Changed"
+  },
+  "changeMoved": {
+    "message": "Moved"
+  },
+  "changeBefore": {
+    "message": "Before"
+  },
+  "changeAfter": {
+    "message": "After"
+  },
+  "openReport": {
+    "message": "Open report"
+  },
+  "reportSavePdf": {
+    "message": "Save as PDF"
+  },
+  "reportSavePdfHint": {
+    "message": "Opens the print dialog. Choose “Save as PDF” as the destination."
+  },
+  "reportDownloadCsv": {
+    "message": "Download CSV"
+  },
+  "reportUnavailable": {
+    "message": "This comparison is no longer available. Run it again from the Droplet side panel."
+  },
+  "fieldLayout": {
+    "message": "Layout"
+  },
+  "fieldWorkflow": {
+    "message": "Workflow"
+  },
+  "fieldSteps": {
+    "message": "Visibility"
+  },
+  "fieldAttributes": {
+    "message": "Attributes"
+  },
+  "fieldDatasets": {
+    "message": "Datasets"
+  },
+  "fieldNotifications": {
+    "message": "Notifications"
+  },
+  "fieldIntegrations": {
+    "message": "Integrations"
+  },
+  "fieldTranslations": {
+    "message": "Translations"
+  },
+  "fieldTagExpressions": {
+    "message": "Tags"
+  },
+  "reportTitle": {
+    "message": "Form version comparison"
+  },
+  "reportForm": {
+    "message": "Form"
+  },
+  "reportFormId": {
+    "message": "Form ID"
+  },
+  "reportVersion": {
+    "message": "Version"
+  },
+  "reportStatus": {
+    "message": "Status"
+  },
+  "reportModified": {
+    "message": "Last modified"
+  },
+  "reportSection": {
+    "message": "Section"
+  },
+  "reportChange": {
+    "message": "Change"
+  },
+  "reportWhere": {
+    "message": "Where"
+  },
+  "reportSummary": {
+    "message": "Summary"
+  },
+  "reportNoChanges": {
+    "message": "No changes"
+  },
+  "versionLocked": {
+    "message": "Locked"
+  },
   "notOnDropletTitle": {
     "message": "Open Droplet to get started"
   },

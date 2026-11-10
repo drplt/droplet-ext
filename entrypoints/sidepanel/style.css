@@ -28,6 +28,8 @@
   --warning-soft: #fff3e0;
   --danger: #df005d;
   --danger-soft: #ffe4f0;
+  --success: #1a7f37;
+  --success-soft: #e3f6e8;
   --mark: #ffd28a;
 
   /* background.tooltip: grey 800 */
@@ -64,6 +66,8 @@
     --warning-soft: #7f2600;
     --danger: #ff6daa;
     --danger-soft: #5c0026;
+    --success: #7ee2a0;
+    --success-soft: #0f4a2a;
     --mark: #7f2600;
 
     --tooltip-bg: #e1e8ee;
@@ -435,4 +439,84 @@ mark {
   .tooltip__bubble {
     transition: none;
   }
+}
+
+/* Compare versions */
+.compare-form {
+  margin-top: 16px;
+}
+
+.compare-form__name {
+  font-family: var(--font-heading);
+}
+
+.results__header:has(.results__actions) {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.results__actions {
+  display: flex;
+  gap: 8px;
+}
+
+details.result > summary {
+  cursor: pointer;
+}
+
+.change-list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.change__path {
+  font-size: 12px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.change__value {
+  display: block;
+  max-height: 160px;
+  margin-top: 4px;
+  padding: 4px 8px;
+  overflow: auto;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  text-decoration: none;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.change__value--before {
+  background: var(--danger-soft);
+}
+
+.change__value--after {
+  background: var(--success-soft);
+}
+
+.tag--added {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.tag--removed {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.tag--changed {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.tag--moved {
+  background: var(--primary-soft);
+  color: var(--primary);
 }

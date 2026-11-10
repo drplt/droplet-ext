@@ -1,4 +1,4 @@
-import { getTargetFromUrl } from './pageContext';
+import { getFormIdFromUrl, getTargetFromUrl } from './pageContext';
 
 describe('getTargetFromUrl', () => {
   it.each([
@@ -12,5 +12,18 @@ describe('getTargetFromUrl', () => {
     [undefined, null],
   ])('%s → %s', (url, expected) => {
     expect(getTargetFromUrl(url)).toBe(expected);
+  });
+});
+
+describe('getFormIdFromUrl', () => {
+  it.each([
+    ['https://app.droplet.io/forms/abc123/edit', 'abc123'],
+    ['https://demo1.app.droplet.io/form/abc123/submission/9', 'abc123'],
+    ['https://app.droplet.io/forms', null],
+    ['https://app.droplet.io/datasets/xyz/edit', null],
+    ['https://example.com/forms/abc123/edit', null],
+    [undefined, null],
+  ])('%s → %s', (url, expected) => {
+    expect(getFormIdFromUrl(url)).toBe(expected);
   });
 });

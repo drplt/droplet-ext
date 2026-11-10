@@ -38,6 +38,7 @@ const doneJob: JobState = {
   itemErrors: [{ id: 'formC', name: 'Locked Down', kind: 'forbidden', message: 'Access Denied' }],
   skipped: [{ id: 'formB', name: 'Field Trip' }],
   lookup: null,
+  comparison: null,
   error: null,
 };
 
