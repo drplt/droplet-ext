@@ -1,20 +1,24 @@
 # Privacy Policy — Droplet Admin Extension
 
-_Last updated: 2026-10-17_
+_Last updated: 2026-11-10_
 
-The Droplet Admin Extension helps Droplet users search their own organization's forms and datasets and look up objects by ID.
+The Droplet Admin Extension helps Droplet users search their own organization's forms and datasets, look up objects by ID, and compare versions of a form.
 
 ## What the extension accesses
 
-- **Your Droplet data, through your own session.** When you run a search or lookup, the extension calls the Droplet API from the Droplet tab you are signed in to, using the access your Droplet role already has. It cannot see anything you couldn't see in the Droplet app.
+- **Your Droplet data, through your own session.** When you run a search, lookup or comparison, the extension calls the Droplet API from the Droplet tab you are signed in to, using the access your Droplet role already has. It cannot see anything you couldn't see in the Droplet app.
 - **The address of the active tab**, only on `app.droplet.io`, to choose a sensible default (e.g. Forms when you're on the Forms page) and to link results to the right place.
 
 ## What the extension stores
 
-- **The results of your most recent search or lookup in each tab**, in the browser's session storage. These are cleared when the tab closes or the browser exits.
+- **The results of your most recent search, lookup or comparison in each tab**, in the browser's session storage. These are cleared when the tab closes or the browser exits. The comparison report window reads from this storage and makes no network requests of its own.
 - **Your last-selected object type** (e.g. "Datasets"), in the browser's local extension storage.
 
 All storage stays on your device.
+
+## Files you export
+
+From the comparison report you can choose **Save as PDF**, which opens your browser's print dialog, or **Download CSV**. Either way the file is saved only where you choose, on your own device. The extension does not upload or keep a copy.
 
 ## What the extension does not do
 
@@ -25,4 +29,4 @@ All storage stays on your device.
 
 ## Contact
 
-Questions about this policy: privacy@droplet.io <!-- TODO: confirm the correct contact address before publishing -->
+Questions about this policy: browser-extension@droplet.io
