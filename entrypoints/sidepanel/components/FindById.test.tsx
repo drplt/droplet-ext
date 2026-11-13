@@ -37,7 +37,7 @@ describe('FindById', () => {
         tab={tab}
         job={jobWith({
           hits: [{ type: 'submission', id: '42', label: '42', formId: 'formA' }],
-          forbidden: ['employee', 'client'],
+          forbidden: ['esignTemplate', 'esignSubmission'],
         })}
         onStart={vi.fn()}
         onCancel={vi.fn()}
@@ -47,7 +47,7 @@ describe('FindById', () => {
     // On the Forms page a submission can't be shown in place; Open in new tab still works.
     expect(screen.getByRole('button', { name: 'Show: 42' })).toHaveAttribute('aria-disabled', 'true');
     expect(screen.getByRole('button', { name: 'Open in new tab: 42' })).toBeEnabled();
-    expect(screen.getByText("You don't have access to check: Employee, Client")).toBeInTheDocument();
+    expect(screen.getByText("You don't have access to check: eSign template, eSign submission")).toBeInTheDocument();
   });
 
   it('says so when nothing matches', () => {

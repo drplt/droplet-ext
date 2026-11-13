@@ -19,8 +19,8 @@ assignees, notification text, translations, dataset values and more. The panel p
 page you're on, and you can switch with one click. Results show exactly where each match is, with a highlighted
 preview.
 
-**Find by ID** — Paste any ID and instantly see whether it's a form, dataset, submission, eSign document, packet,
-client, employee, role, tag or account.
+**Find by ID** — Paste any ID and instantly see whether it's a form, dataset, submission, eSign template, eSign
+submission or packet template.
 
 **Compare** — Choose two versions of a form and see exactly what changed: which fields were added, removed, moved or
 edited, and what changed in the workflow, visibility, notifications and other settings. Open the comparison as a

@@ -184,21 +184,6 @@
   "pagePackets": {
     "message": "Packets"
   },
-  "pageClients": {
-    "message": "Clients"
-  },
-  "pageEmployees": {
-    "message": "Employees"
-  },
-  "pageRoles": {
-    "message": "Roles"
-  },
-  "pageTags": {
-    "message": "Tags"
-  },
-  "pageAccounts": {
-    "message": "Accounts"
-  },
   "actionOpen": {
     "message": "Open in new tab"
   },
@@ -217,26 +202,8 @@
   "typeEsignTemplate": {
     "message": "eSign template"
   },
-  "typePacket": {
-    "message": "Packet"
-  },
   "typePacketTemplate": {
     "message": "Packet template"
-  },
-  "typeClient": {
-    "message": "Client"
-  },
-  "typeEmployee": {
-    "message": "Employee"
-  },
-  "typeRole": {
-    "message": "Role"
-  },
-  "typeTag": {
-    "message": "Tag"
-  },
-  "typeAccount": {
-    "message": "Account"
   },
   "tabCompare": {
     "message": "Compare"

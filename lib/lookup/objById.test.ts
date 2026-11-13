@@ -12,7 +12,7 @@ describe('findObjById', () => {
     const { promise } = lookup(
       {
         'GET forms/abc123': () => ok({ id: 'abc123', name: 'Intake' }),
-        'GET tags/abc123': () => ok({ id: 'abc123', name: 'urgent' }),
+        'GET esign/abc123': () => ok({ id: 'abc123', name: 'Offer letter' }),
         'GET datasets/abc123': () => fail(500, 'HASH-ID-INVALID-ID'),
       },
       'abc123',
@@ -20,7 +20,7 @@ describe('findObjById', () => {
     const result = await promise;
     expect(result.hits).toEqual([
       { type: 'form', id: 'abc123', label: 'Intake', formId: null },
-      { type: 'tag', id: 'abc123', label: 'urgent', formId: null },
+      { type: 'esignTemplate', id: 'abc123', label: 'Offer letter', formId: null },
     ]);
     expect(result.forbidden).toEqual([]);
   });
@@ -30,22 +30,44 @@ describe('findObjById', () => {
     await hashLookup.promise;
     expect(hashLookup.calls.some(call => call.path.startsWith('submissions/'))).toBe(false);
 
-    const { promise } = lookup({ 'GET submissions/42': () => ok({ id: 42, formId: 'formA' }) }, ' 42 ');
+    // The API wraps a submission alongside its form version.
+    const { promise } = lookup(
+      { 'GET submissions/42': () => ok({ submission: { id: 42, formId: 'formA' }, form: { id: 'formA' } }) },
+      ' 42 ',
+    );
     expect((await promise).hits).toContainEqual({ type: 'submission', id: '42', label: '42', formId: 'formA' });
   });
 
-  it('finds accounts through the entities endpoint', async () => {
-    const { calls, promise } = lookup(
-      { 'POST accounts/entities': () => ok([{ id: 'acc1', fullName: 'Ada Lovelace', email: 'ada@example.com' }]) },
-      'acc1',
-    );
-    expect((await promise).hits).toEqual([{ type: 'account', id: 'acc1', label: 'Ada Lovelace', formId: null }]);
-    expect(calls.find(call => call.path === 'accounts/entities')?.body).toEqual({ ids: ['acc1'] });
+  it('finds eSign submissions by numeric id', async () => {
+    const { promise } = lookup({ 'GET esignSubmissions/7': () => ok({ id: 7, name: 'Signed offer' }) }, '7');
+    expect((await promise).hits).toEqual([{ type: 'esignSubmission', id: '7', label: 'Signed offer', formId: null }]);
+  });
+
+  it('probes only the supported getById routes', async () => {
+    const hashLookup = lookup({}, 'abc');
+    await hashLookup.promise;
+    expect(hashLookup.calls.map(call => call.path).sort()).toEqual([
+      'datasets/abc',
+      'esign/abc',
+      'forms/abc',
+      'packets/templates/abc',
+    ]);
+
+    const numericLookup = lookup({}, '42');
+    await numericLookup.promise;
+    expect(numericLookup.calls.map(call => call.path).sort()).toEqual([
+      'datasets/42',
+      'esign/42',
+      'esignSubmissions/42',
+      'forms/42',
+      'packets/templates/42',
+      'submissions/42',
+    ]);
   });
 
   it('lists types the user is not allowed to check', async () => {
-    const { promise } = lookup({ 'GET employees/abc': () => fail(403, 'FORBIDDEN') }, 'abc');
-    expect((await promise).forbidden).toEqual(['employee']);
+    const { promise } = lookup({ 'GET esign/abc': () => fail(403, 'FORBIDDEN') }, 'abc');
+    expect((await promise).forbidden).toEqual(['esignTemplate']);
   });
 
   it('surfaces an expired session instead of reporting "not found"', async () => {

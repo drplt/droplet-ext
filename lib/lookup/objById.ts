@@ -22,9 +22,7 @@ type LookupResult = {
 
 const entity = z.looseObject({
   id: z.union([z.string(), z.number()]),
-  email: z.string().nullish(),
   formId: z.string().nullish(),
-  fullName: z.string().nullish(),
   name: z.string().nullish(),
   title: z.string().nullish(),
 });
@@ -45,28 +43,27 @@ const byId =
   (api, id, signal) =>
     api.get(`${resource}/${encodeURIComponent(id)}`, entity, { signal });
 
+// GET submissions/:id wraps the submission alongside its form version.
+const submissionResponse = z.looseObject({ submission: entity });
+
+// Paths are the drplt spec base paths (`Spec('esign', …)`), not the spec registry keys (`documents`, …).
 const PROBES: Probe[] = [
   { type: 'form', fetch: byId('forms') },
   { type: 'dataset', fetch: byId('datasets') },
-  { type: 'submission', fetch: byId('submissions'), accepts: isNumeric },
-  { type: 'esignSubmission', fetch: byId('documentSubmissions'), accepts: isNumeric },
-  { type: 'esignTemplate', fetch: byId('documents') },
-  { type: 'packet', fetch: byId('packets') },
-  { type: 'packetTemplate', fetch: byId('packets/templates') },
-  { type: 'client', fetch: byId('clients') },
-  { type: 'employee', fetch: byId('employees') },
-  { type: 'role', fetch: byId('roles') },
-  { type: 'tag', fetch: byId('tags') },
   {
-    type: 'account',
+    type: 'submission',
+    accepts: isNumeric,
     fetch: async (api, id, signal) => {
-      const accounts = await api.post('accounts/entities', { ids: [id] }, z.array(entity), { signal });
-      return accounts[0] ?? null;
+      const { submission } = await api.get(`submissions/${encodeURIComponent(id)}`, submissionResponse, { signal });
+      return submission;
     },
   },
+  { type: 'esignTemplate', fetch: byId('esign') },
+  { type: 'esignSubmission', fetch: byId('esignSubmissions'), accepts: isNumeric },
+  { type: 'packetTemplate', fetch: byId('packets/templates') },
 ];
 
-const labelFor = (found: Entity, id: string) => found.name ?? found.title ?? found.fullName ?? found.email ?? id;
+const labelFor = (found: Entity, id: string) => found.name ?? found.title ?? id;
 
 const findObjById = async (api: ApiClient, rawId: string, signal: AbortSignal): Promise<LookupResult> => {
   const id = rawId.trim();
