@@ -6,7 +6,7 @@ A browser extension for **Chrome** and **Firefox** that adds a side panel to the
   - The object type is picked from the page you're on (`/forms` → Forms, `/datasets` → Datasets), and you can change it with a dropdown.
   - Form search covers layout, workflow, visibility, attributes, datasets, notifications, integrations, translations and tags.
   - Dataset search covers every value, labelled by row and column.
-- **Find by ID.** Paste any ID and see what it is (`findObjById`): a form, dataset, submission, eSign template or submission, packet, packet template, client, employee, role, tag or account.
+- **Find by ID.** Paste any ID and see what it is (`findObjById`): a form, dataset, submission, eSign template, eSign submission or packet template.
 - **Compare.** Pick two versions of a form and see what changed between them, section by section.
   - The form is taken from the page you're on (`/forms/:id/edit`), or you can paste a form ID.
   - It starts on the usual question, published version → newest version, and any two versions can be chosen.
@@ -90,7 +90,7 @@ On Firefox the content script uses `content.fetch` so that requests go out as th
 - A per-item permission error is listed rather than failing the whole run.
 - A lost session, or no access to the list at all, stops the run with a clear message.
 
-**Find by ID.** Droplet IDs are hashids salted per object type, so an ID alone doesn't say what it is. `lib/lookup/objById.ts` tries every `getById` route in parallel and reports each one that resolves. Submission routes are only tried for numeric IDs.
+**Find by ID.** Droplet IDs are hashids salted per object type, so an ID alone doesn't say what it is. `lib/lookup/objById.ts` tries the `getById` route of each supported type in parallel (`forms`, `datasets`, `submissions`, `esign`, `esignSubmissions`, `packets/templates`) and reports each one that resolves. Submission and eSign submission routes are only tried for numeric IDs.
 
 **Comparing versions.** The API returns each document of a form version as text: the layout as JSX, everything else as JSON. Comparing that text directly would mostly report formatting, so `lib/compare` compares what the text means.
 

@@ -18,8 +18,8 @@ describe('getObjectPath', () => {
 
 describe('getObjectUrl', () => {
   it('resolves against the app origin', () => {
-    expect(getObjectUrl('https://demo1.app.droplet.io', { type: 'packet', id: 'p1' })).toBe(
-      'https://demo1.app.droplet.io/packets/p1',
+    expect(getObjectUrl('https://demo1.app.droplet.io', { type: 'packetTemplate', id: 'p1' })).toBe(
+      'https://demo1.app.droplet.io/packets/templates/p1/edit',
     );
   });
 });
@@ -33,7 +33,7 @@ describe('isOnObjectPage', () => {
     ['dataset', 'https://app.droplet.io/forms', false],
     ['dataset', 'https://app.droplet.io/datasetsx', false],
     ['submission', 'https://app.droplet.io/form/abc/submission/1', true],
-    ['tag', 'https://app.droplet.io/organization/roles', false],
+    ['packetTemplate', 'https://app.droplet.io/forms', false],
     ['form', undefined, false],
   ] as const)('%s on %s → %s', (type, url, expected) => {
     expect(isOnObjectPage(type, url)).toBe(expected);

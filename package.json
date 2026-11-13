@@ -1,7 +1,7 @@
 {
   "name": "droplet-ext",
   "description": "Droplet Admin Extension: search forms and datasets and look up objects by ID from a browser side panel.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "license": "UNLICENSED",
   "type": "module",
