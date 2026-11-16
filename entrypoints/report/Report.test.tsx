@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import type { VersionComparison } from '@/lib/compare/types';
@@ -78,7 +78,10 @@ describe('Report', () => {
     expect(
       screen.getByRole('row', { name: /Changed Form › Input #name › label "Name" "Full, legal name"/ }),
     ).toBeVisible();
-    expect(document.title).toBe('90-Day Evaluation, v-1 to v-2');
+    // The title is set in a passive effect, which can land after the commit that renders the heading.
+    await waitFor(() => {
+      expect(document.title).toBe('90-Day Evaluation, v-1 to v-2');
+    });
   });
 
   it('says there are no changes, and offers no empty CSV', async () => {
@@ -116,7 +119,9 @@ describe('Report', () => {
     expect(
       await screen.findByRole('heading', { level: 1, name: 'This comparison isn’t available' }),
     ).toBeInTheDocument();
-    expect(document.title).toBe('This comparison isn’t available');
+    await waitFor(() => {
+      expect(document.title).toBe('This comparison isn’t available');
+    });
     const close = vi.spyOn(window, 'close').mockImplementation(() => undefined);
     await userEvent.click(screen.getByRole('button', { name: 'Close window' }));
     expect(close).toHaveBeenCalledOnce();
