@@ -6,6 +6,8 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-16
+
 ### Changed
 
 - Redesigned the side panel and the comparison report: a type scale, one filled button per view with quieter text
