@@ -6,7 +6,7 @@ import type { JobState } from '@/lib/messages';
 
 import { FindText } from './FindText';
 
-const tabAt = (url: string) => ({ id: 7, url, windowId: 1 });
+const tabAt = (url: string) => ({ id: 7, url, windowId: 1, loadedAt: 0 });
 
 const doneJob: JobState = {
   jobId: 'j1',
@@ -85,16 +85,86 @@ describe('FindText', () => {
 
   it('renders hits with highlighted snippets, counts and per-item errors', () => {
     renderFindText('https://app.droplet.io/forms', doneJob);
-    // formB was skipped (never published), so only 2 of the 3 forms were actually searched.
-    expect(screen.getByText('Found in 1 of 2')).toBeInTheDocument();
-    expect(screen.getByText('Published')).toHaveAttribute('title', 'Version v2');
-    expect(screen.getByText('Draft')).toHaveAttribute('title', 'Version draft-9');
-    expect(screen.getByText(/1 never published, so not searched/)).toBeInTheDocument();
-    expect(screen.getByText('Patient Intake')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: '“patient” in Forms' })).toBeInTheDocument();
+    // 3 forms: 1 skipped (never published) and 1 unreadable, so the parts add up: 1 searched.
+    expect(screen.getByText('Found in 1 of 1 form')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: '1 never published' })).toHaveAttribute('href', '#find-text-skipped');
+    expect(screen.getByRole('link', { name: '1 couldn’t be searched' })).toHaveAttribute('href', '#find-text-failed');
+    expect(screen.getByText('Layout · Published · v2')).not.toHaveClass('tag');
+    expect(screen.getByText('Draft · draft-9')).toHaveClass('tag--draft');
+    expect(screen.getByText(/1 form has never been published, so it wasn’t searched/)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 3, name: 'Patient Intake' })).toBeInTheDocument();
+    expect(screen.getByText('4 matches')).toBeInTheDocument();
     expect(screen.getByText('Patient', { selector: 'mark' })).toBeInTheDocument();
-    expect(screen.getByText('+ 2 more')).toBeInTheDocument();
-    expect(screen.getByText('1 could not be searched')).toBeInTheDocument();
+    expect(screen.getByText('+ 2 more matches')).toBeInTheDocument();
+    expect(screen.getByText('1 form couldn’t be searched')).toBeInTheDocument();
+    expect(screen.getByText('No access')).toBeInTheDocument();
+    // Per-item failures come from reading a version, which needs Build.
+    expect(screen.getByText(/Ask an admin for Build access to forms/)).toBeInTheDocument();
     expect(screen.getByLabelText(/Text to find/)).toHaveValue('patient');
+  });
+
+  it('keeps the couldn’t-be-searched disclosure in the tab order, and opens it from the summary link', async () => {
+    renderFindText('https://app.droplet.io/forms', doneJob);
+    const summary = screen.getByText('1 form couldn’t be searched').closest('summary')!;
+    expect(summary.closest('details')).not.toHaveAttribute('tabindex');
+    await userEvent.click(screen.getByRole('link', { name: '1 couldn’t be searched' }));
+    expect(summary.closest('details')).toHaveAttribute('open');
+    expect(summary).toHaveFocus();
+  });
+
+  it('doesn’t suggest turning on drafts when drafts were already searched', () => {
+    const job: JobState = { ...doneJob, request: { ...doneJob.request, options: { includeDrafts: true } } } as JobState;
+    renderFindText('https://app.droplet.io/forms', job);
+    expect(screen.getByRole('link', { name: '1 with nothing to search' })).toBeInTheDocument();
+    expect(screen.getByText('1 form has no published version or draft, so it wasn’t searched.')).toBeInTheDocument();
+    expect(screen.queryByText(/Turn on/)).not.toBeInTheDocument();
+  });
+
+  it('shows only the error when a run failed before searching anything', () => {
+    const job: JobState = {
+      ...doneJob,
+      status: 'error',
+      progress: null,
+      hits: [],
+      itemErrors: [],
+      skipped: [],
+      error: { kind: 'network', message: '' },
+    };
+    renderFindText('https://app.droplet.io/forms', job);
+    expect(screen.getByRole('alert')).toHaveTextContent('Couldn’t reach Droplet.');
+    expect(screen.queryByRole('heading', { level: 2 })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Clear results' })).not.toBeInTheDocument();
+  });
+
+  it('marks results as stale once the search no longer matches them', async () => {
+    renderFindText('https://app.droplet.io/forms', doneJob);
+    expect(screen.queryByText(/Showing results for the previous search/)).not.toBeInTheDocument();
+    await userEvent.type(screen.getByLabelText('Text to find'), 's');
+    expect(screen.getByText(/Showing results for the previous search/)).toBeInTheDocument();
+  });
+
+  it('says what was searched when nothing matches, including that drafts were left out', () => {
+    renderFindText('https://app.droplet.io/forms', { ...doneJob, hits: [], itemErrors: [], skipped: [] });
+    expect(screen.getByText('Searched 3 forms')).toBeInTheDocument();
+    expect(screen.getByText('No forms contain “patient”. Drafts weren’t searched.')).toBeInTheDocument();
+  });
+
+  it('never names View or Build when datasets are forbidden', () => {
+    const job: JobState = {
+      ...doneJob,
+      request: { kind: 'findText', target: 'datasets', query: 'lincoln', options: { includeDrafts: false } },
+      status: 'error',
+      progress: null,
+      hits: [],
+      itemErrors: [],
+      skipped: [],
+      error: { kind: 'forbidden', message: 'Access Denied' },
+    };
+    renderFindText('https://app.droplet.io/datasets', job);
+    const alert = screen.getByRole('alert');
+    expect(alert).toHaveTextContent('Ask an admin for access to datasets.');
+    expect(alert).not.toHaveTextContent(/View|Build/);
   });
 
   it('opens a result in a new tab on the same Droplet environment', async () => {
@@ -106,12 +176,26 @@ describe('FindText', () => {
     );
   });
 
-  it('shows the cancel control while running', async () => {
-    const running: JobState = { ...doneJob, status: 'running', finishedAt: null, progress: { done: 1, total: 3 } };
+  it('shows progress and a Stop control while running, keeping results in arrival order', async () => {
+    const second = { ...doneJob.hits[0]!, id: 'formZ', name: 'Allergy Plan' };
+    const running: JobState = {
+      ...doneJob,
+      status: 'running',
+      finishedAt: null,
+      progress: { done: 1, total: 3 },
+      hits: [...doneJob.hits, second],
+    };
     const { onCancel } = renderFindText('https://app.droplet.io/forms', running);
-    expect(screen.getByRole('status')).toHaveTextContent('Searched 1 of 3');
+    expect(screen.getByText('Searched 1 of 3 forms')).toBeInTheDocument();
+    // Progress isn't a live region; the panel announces start and finish once instead.
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    expect(screen.getByText(/Show opens a new tab/)).toBeInTheDocument();
+    expect(screen.getAllByRole('heading', { level: 3 }).map(heading => heading.textContent)).toEqual([
+      'Patient Intake',
+      'Allergy Plan',
+    ]);
     expect(screen.getByRole('button', { name: 'Search' })).toBeDisabled();
-    await userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Stop' }));
     expect(onCancel).toHaveBeenCalled();
   });
 });

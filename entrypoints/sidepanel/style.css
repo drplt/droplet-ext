@@ -1,6 +1,12 @@
 /*
  * Colours mirror the Droplet app's MUI palette (drplt/src/ui/theme/palette.ts, values from @drplt/color) so the panel
- * feels native next to the app. Light/dark follow the OS setting.
+ * feels native next to the app. Light/dark follow the OS setting. The report window imports this file too.
+ *
+ * Type scale: use only these four sizes (plus mono for snippets and diffs).
+ *   --fs-title 15/600  card titles, section headings
+ *   --fs-body  14/400  body text, inputs
+ *   --fs-label 13/500  field labels, tabs, text buttons
+ *   --fs-meta  12/500  counts, locations, paths, hints (muted)
  */
 :root {
   color-scheme: light dark;
@@ -9,11 +15,15 @@
   --bg: #f9f9f9;
   --surface: #ffffff;
   --border: #e0e0e0;
+  /* Form-field and selected-control edges: 3.4:1 on white (WCAG 1.4.11). */
+  --border-strong: #8a8a8a;
   --divider: rgb(0 0 0 / 12%);
+  --track: rgb(0 0 0 / 5%);
+  --neutral-soft: rgb(0 0 0 / 4%);
 
   /* text.primary / text.secondary */
   --text: rgb(0 0 0 / 75%);
-  --muted: rgb(0 0 0 / 55%);
+  --muted: rgb(0 0 0 / 58%);
 
   /* primary: blueberry 400 / 100, hovered = main @ 8%, selected = main @ 12% */
   --primary: #003ceb;
@@ -23,12 +33,13 @@
   --primary-selected: rgb(0 60 235 / 12%);
   --primary-gradient: linear-gradient(99.05deg, #003ceb 0.49%, #00b6ff 103.6%);
 
-  /* warning: tangerine, error: raspberry */
+  /* warning: tangerine 600 / 100, error: raspberry 500 / 100 (text uses raspberry 600 for contrast), success */
   --warning: #be3900;
   --warning-soft: #fff3e0;
   --danger: #df005d;
+  --danger-text: #aa0047;
   --danger-soft: #ffe4f0;
-  --success: #1a7f37;
+  --success: #17702f;
   --success-soft: #e3f6e8;
   --mark: #ffd28a;
 
@@ -36,44 +47,59 @@
   --tooltip-bg: #1d3345;
   --tooltip-text: #ffffff;
 
-  --disabled-text: rgb(0 0 0 / 26%);
+  --disabled-text: rgb(0 0 0 / 38%);
   --disabled-bg: rgb(0 0 0 / 12%);
 
+  --fs-title: 15px;
+  --fs-body: 14px;
+  --fs-label: 13px;
+  --fs-meta: 12px;
+  --fs-tag: 11px;
+
   --radius: 8px;
+  --radius-sm: 4px;
   --pill: 21px;
+  --control-height: 36px;
   --font: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-heading: GilroyBold, Gilroy, Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   :root {
     --bg: #0e1b54;
     --surface: #000235;
-    --border: rgb(255 255 255 / 12%);
+    --border: rgb(255 255 255 / 16%);
+    --border-strong: rgb(255 255 255 / 45%);
     --divider: rgb(255 255 255 / 12%);
+    --track: rgb(0 0 0 / 22%);
+    --neutral-soft: rgb(255 255 255 / 6%);
 
-    --text: rgb(255 255 255 / 75%);
-    --muted: rgb(255 255 255 / 55%);
+    --text: rgb(255 255 255 / 82%);
+    --muted: rgb(255 255 255 / 62%);
 
     /* primary: sapphire 400 / 100 */
     --primary: #00b6ff;
     --primary-contrast: #000235;
-    --primary-soft: #14376e;
-    --primary-hover: rgb(0 182 255 / 8%);
-    --primary-selected: rgb(0 182 255 / 12%);
+    --primary-soft: rgb(0 182 255 / 14%);
+    --primary-hover: rgb(0 182 255 / 10%);
+    --primary-selected: rgb(0 182 255 / 16%);
 
-    --warning: #ffd28a;
-    --warning-soft: #7f2600;
+    --warning: #ffc773;
+    /* Opaque warm tint, like the diff tints: alpha over the navy reads as grey-blue, the same as an info notice. */
+    --warning-soft: #3a2a12;
     --danger: #ff6daa;
-    --danger-soft: #5c0026;
+    --danger-text: #ff8fbd;
+    /* Opaque on purpose: alpha tints over Droplet's navy drift to purple and teal, and diffs must read red / green. */
+    --danger-soft: #45112f;
     --success: #7ee2a0;
-    --success-soft: #0f4a2a;
-    --mark: #7f2600;
+    --success-soft: #103d2b;
+    --mark: rgb(255 190 60 / 38%);
 
     --tooltip-bg: #e1e8ee;
     --tooltip-text: #000235;
 
-    --disabled-text: rgb(255 255 255 / 30%);
+    --disabled-text: rgb(255 255 255 / 38%);
     --disabled-bg: rgb(255 255 255 / 12%);
   }
 }
@@ -86,95 +112,217 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font: 14px/1.45 var(--font);
+  font: var(--fs-body) / 1.45 var(--font);
+  -webkit-font-smoothing: antialiased;
 }
 
-.app,
-.empty {
-  padding: 12px 16px 24px;
+h1,
+h2,
+h3,
+p {
+  margin: 0;
 }
 
-.empty {
-  text-align: center;
-  padding-top: 48px;
+/* Links inside sentences: primary and always underlined (colour alone isn't enough next to muted text). Standalone
+   actions are .button--text, which isn't underlined. */
+a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
-.empty h2 {
-  font: 700 18px/1.2 var(--font-heading);
-  color: var(--text);
-  margin: 0 0 8px;
+a:hover {
+  text-decoration-thickness: 2px;
 }
 
-.empty p {
-  color: var(--muted);
-  margin: 0 0 16px;
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
-/* Tool switcher: segmented control in Droplet's primary blue. */
+/* ── Shell ─────────────────────────────────────────────────────────────────────────────────────────────────── */
+
+.app {
+  padding: 12px 16px 32px;
+}
+
+/* Tool switcher: a neutral segmented control, so the one filled button below stays the loudest thing. */
 .tabs {
-  display: flex;
-  gap: 4px;
-  padding: 4px;
-  background: var(--surface);
-  border: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2px;
+  padding: 3px;
+  margin-bottom: 20px;
+  background: var(--track);
   border-radius: var(--pill);
-  margin-bottom: 16px;
 }
 
 .tabs__tab {
-  flex: 1;
-  border: 0;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 4px;
+  border: 1px solid transparent;
   border-radius: var(--pill);
-  padding: 6px 8px;
   background: transparent;
   color: var(--muted);
-  font: 600 14px/1.3 var(--font);
-  letter-spacing: 0.5px;
+  font: 500 var(--fs-label) / 1.2 var(--font);
+  white-space: nowrap;
   cursor: pointer;
 }
 
 .tabs__tab:hover {
-  background: var(--primary-hover);
+  color: var(--text);
 }
 
 .tabs__tab[aria-selected='true'] {
-  background: var(--primary-gradient);
-  color: #ffffff;
+  background: var(--surface);
+  border-color: var(--border-strong);
+  color: var(--primary);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 8%);
 }
 
-.stack,
+.tabs__tab:focus-visible {
+  outline-offset: 0;
+}
+
+/* A job is running in this tool. */
+.tabs__dot {
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+/* At 200% zoom the three labels can't fit on one line each; let them wrap rather than overlap. */
+@media (max-width: 259px) {
+  /* Content-sized columns: equal thirds are too narrow for "Compare" at this width. */
+  .tabs {
+    grid-template-columns: repeat(3, auto);
+    justify-content: space-between;
+  }
+
+  .tabs__tab {
+    padding: 4px 2px;
+    font-size: var(--fs-meta);
+    white-space: normal;
+    line-height: 1.15;
+    text-align: center;
+  }
+}
+
+@media (forced-colors: active) {
+  .tabs__tab[aria-selected='true'] {
+    border-color: Highlight;
+  }
+
+  .tabs__dot {
+    background: CanvasText;
+  }
+}
+
+/* Above a tool: another tool's job, or a panel-level error. */
+.panel-notices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.panel-notices:empty {
+  display: none;
+}
+
+/* Not on a Droplet page. */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 56px 16px 24px;
+  text-align: center;
+}
+
+.empty__mark {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 4px;
+  color: var(--primary);
+}
+
+.empty h1 {
+  font: 700 18px/1.25 var(--font-heading);
+  color: var(--text);
+  text-wrap: balance;
+}
+
+.empty p {
+  max-width: 30ch;
+  margin-bottom: 12px;
+  color: var(--muted);
+  text-wrap: balance;
+}
+
+/* ── Forms ─────────────────────────────────────────────────────────────────────────────────────────────────── */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .field {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
 }
 
-.field {
-  gap: 4px;
-}
-
-.field label {
-  font-weight: 600;
+.field > label,
+.field__label {
+  color: var(--text);
+  font-size: var(--fs-label);
+  font-weight: 500;
 }
 
 .hint {
   color: var(--muted);
+  font-size: var(--fs-meta);
   font-weight: 400;
-  font-size: 12px;
+  line-height: 1.4;
 }
 
 .input-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
+/* Outranks the generic input rule's `flex: 1`, so the button wraps under the field when there's no room. */
+.input-row > input[type] {
+  flex: 1 1 140px;
+}
+
 input[type='search'],
+input[type='text'],
 select {
   flex: 1;
   min-width: 0;
-  min-height: 38px;
-  padding: 7px 12px;
-  border: 1px solid var(--border);
+  min-height: var(--control-height);
+  padding: 6px 12px;
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius);
   background: var(--surface);
   color: var(--text);
@@ -182,19 +330,43 @@ select {
 }
 
 input[type='search']:hover,
+input[type='text']:hover,
 select:hover {
-  border-color: var(--muted);
+  border-color: var(--text);
+}
+
+input:disabled,
+select:disabled {
+  color: var(--disabled-text);
+  border-color: var(--disabled-bg);
+  cursor: not-allowed;
+}
+
+input::placeholder {
+  color: var(--muted);
 }
 
 input:focus-visible,
 select:focus-visible,
 button:focus-visible,
-summary:focus-visible {
+summary:focus-visible,
+a:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 
+input[type='search']:focus-visible,
+input[type='text']:focus-visible,
+select:focus-visible {
+  outline-offset: -1px;
+  border-color: var(--primary);
+}
+
 input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  margin: 2px 0 0;
+  flex: none;
   accent-color: var(--primary);
 }
 
@@ -205,25 +377,41 @@ input[type='checkbox'] {
   color: var(--text);
 }
 
-.checkbox__hint {
-  display: block;
+.checkbox label {
+  font-size: var(--fs-body);
 }
 
-/* Buttons follow the app's MUI overrides: pill radius, capitalised labels, 0.5px tracking. */
+.checkbox__hint {
+  display: block;
+  margin-top: 2px;
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * Hierarchy: one filled .button per view (Search, Find, Compare versions). .button--secondary for a rare second
+ * action. .button--text for everything else (Show, Open in new tab, Clear results, Stop, Reload tab).
+ * The filled button follows the app's MUI overrides: pill radius, 0.5px tracking.
+ */
 .button {
-  padding: 7px 18px;
-  border: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: var(--control-height);
+  padding: 6px 18px;
+  border: 1px solid transparent;
   border-radius: var(--pill);
   background: var(--primary);
   color: var(--primary-contrast);
-  font: 600 14px/1.3 var(--font);
-  letter-spacing: 0.5px;
-  cursor: pointer;
+  font: 600 var(--fs-body) / 1.2 var(--font);
+  letter-spacing: 0.3px;
+  text-decoration: none;
   white-space: nowrap;
+  cursor: pointer;
   box-shadow:
-    0 1px 5px 0 rgb(0 0 0 / 12%),
-    0 2px 2px 0 rgb(0 0 0 / 14%),
-    0 3px 1px -2px rgb(0 0 0 / 20%);
+    0 1px 2px rgb(0 0 0 / 14%),
+    0 2px 6px -2px rgb(0 60 235 / 30%);
 }
 
 .button:hover {
@@ -239,78 +427,349 @@ input[type='checkbox'] {
   cursor: not-allowed;
 }
 
-.button--small {
-  padding: 4px 12px;
-  font-size: 12px;
+.button--secondary {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text);
+  box-shadow: none;
 }
 
-.button--quiet {
+.button--secondary:hover {
+  background: var(--neutral-soft);
+  filter: none;
+}
+
+.button--secondary:disabled {
+  background: transparent;
+  border-color: var(--disabled-bg);
+}
+
+.button--text {
+  min-height: 24px;
+  padding: 3px 6px;
+  border-radius: var(--radius-sm);
   background: transparent;
   color: var(--primary);
-  box-shadow: inset 0 0 0 1px var(--primary);
+  font-size: var(--fs-label);
+  letter-spacing: 0;
+  box-shadow: none;
 }
 
-.button--quiet:hover {
+.button--text:hover {
   background: var(--primary-hover);
   filter: none;
 }
 
-.button--quiet:disabled {
+.button--text:disabled,
+.button--text[aria-disabled='true'] {
   background: transparent;
-  box-shadow: inset 0 0 0 1px var(--disabled-bg);
+  color: var(--disabled-text);
 }
 
+.button__icon {
+  width: 12px;
+  height: 12px;
+  flex: none;
+}
+
+/* A row of text buttons. The negative margin lines the first label up with the text above it. */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 4px;
+  margin: 8px 0 0 -6px;
+}
+
+.actions__reason {
+  margin-top: 2px;
+}
+
+/* ── Progress ──────────────────────────────────────────────────────────────────────────────────────────────── */
+
 .status {
-  margin-top: 16px;
+  margin-top: 20px;
 }
 
 .status__row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: var(--muted);
+  gap: 8px;
+  min-height: 24px;
   margin-bottom: 6px;
+  color: var(--muted);
+  font-size: var(--fs-label);
+  font-variant-numeric: tabular-nums;
+}
+
+.status__row .button--text {
+  margin-right: -6px;
 }
 
 .status__bar {
+  display: block;
   width: 100%;
-  height: 6px;
-  accent-color: var(--primary);
+  height: 4px;
+  border: 0;
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--divider);
+  color: var(--primary);
+  appearance: none;
 }
 
+.status__bar::-webkit-progress-bar {
+  background: var(--divider);
+}
+
+.status__bar::-webkit-progress-value {
+  background: var(--primary);
+  border-radius: 2px;
+  transition: width 200ms ease-out;
+}
+
+.status__bar::-moz-progress-bar {
+  background: var(--primary);
+  border-radius: 2px;
+}
+
+/* No value yet: a sliding segment. */
+.status__bar:indeterminate {
+  background: linear-gradient(90deg, transparent 0 30%, var(--primary) 30% 60%, transparent 60%) 0 0 / 250% 100%
+    no-repeat var(--divider);
+  animation: status-slide 1.4s ease-in-out infinite;
+}
+
+.status__bar:indeterminate::-webkit-progress-bar {
+  background: transparent;
+}
+
+.status__bar:indeterminate::-moz-progress-bar {
+  background: transparent;
+}
+
+@keyframes status-slide {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status__bar:indeterminate {
+    animation: none;
+    background: var(--primary-selected);
+  }
+
+  .status__bar::-webkit-progress-value {
+    transition: none;
+  }
+}
+
+/* ── Notices ───────────────────────────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * .notice--info: a limit on the answer, nothing at risk (skipped items, types you can't check, another tool's job).
+ * .notice--warning: partial results (items that couldn't be read). .notice--error: the whole run failed.
+ * A bare .notice is the info style.
+ */
 .notice {
-  margin: 12px 0 0;
-  padding: 8px 12px;
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  column-gap: 10px;
+  align-items: start;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid transparent;
   border-radius: var(--radius);
-  background: var(--primary-soft);
+  background: var(--neutral-soft);
   color: var(--text);
+  font-size: var(--fs-label);
+  line-height: 1.45;
 }
 
-.notice--error {
-  background: var(--danger-soft);
-  color: var(--danger);
+.notice > :not(.notice__icon) {
+  grid-column: 2;
+}
+
+.notice__icon {
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  color: var(--muted);
+}
+
+.notice__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  margin: 4px 0 0 -6px;
 }
 
 .notice--warning {
+  border-color: transparent;
   background: var(--warning-soft);
+}
+
+.notice--warning .notice__icon {
   color: var(--warning);
+}
+
+.notice--error {
+  border-color: transparent;
+  background: var(--danger-soft);
+  color: var(--danger-text);
+}
+
+.notice--error .notice__icon {
+  color: var(--danger-text);
+}
+
+.notice--error .button--text {
+  color: var(--danger-text);
+}
+
+.notice--error .button--text:hover {
+  background: rgb(170 0 71 / 8%);
+}
+
+.notice summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.notice summary::-webkit-details-marker {
+  display: none;
 }
 
 .notice ul {
   margin: 6px 0 0;
-  padding-left: 18px;
+  padding-left: 16px;
 }
 
+.notice li + li {
+  margin-top: 2px;
+}
+
+@media (forced-colors: active) {
+  .notice {
+    border-color: CanvasText;
+  }
+}
+
+/* ── Tags ──────────────────────────────────────────────────────────────────────────────────────────────────── */
+
+/* One chip for object types, version status and change kinds. Sentence case; the label carries the meaning. */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 6px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: var(--neutral-soft);
+  color: var(--text);
+  font: 600 var(--fs-tag) / 16px var(--font);
+  white-space: nowrap;
+  vertical-align: 1px;
+}
+
+.tag--neutral {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--muted);
+}
+
+.tag--draft {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.tag--added {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.tag--removed {
+  background: var(--danger-soft);
+  color: var(--danger-text);
+}
+
+.tag--changed {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.tag--moved {
+  background: var(--neutral-soft);
+  color: var(--text);
+}
+
+@media (forced-colors: active) {
+  .tag {
+    border-color: CanvasText;
+  }
+}
+
+/* ── Results ───────────────────────────────────────────────────────────────────────────────────────────────── */
+
 .results {
-  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 24px;
 }
 
 .results__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  column-gap: 12px;
   color: var(--muted);
-  min-height: 24px;
+  font-size: var(--fs-meta);
+}
+
+.results__header > .results__meta {
+  min-width: 0;
+  grid-column: 1 / -1;
+}
+
+.results__heading {
+  min-width: 0;
+}
+
+.results__title {
+  color: var(--text);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.results__meta {
+  color: var(--muted);
+  font-size: var(--fs-meta);
+  font-variant-numeric: tabular-nums;
+}
+
+.results__meta > span {
+  white-space: nowrap;
+}
+
+.results__actions {
+  display: flex;
+  gap: 4px;
+  margin: -2px -6px 0 0;
+}
+
+/* Results that no longer match the form above them: dashed cards on the page background, plus a hint line. */
+.results--stale .result {
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--border-strong);
 }
 
 .result-list,
@@ -320,89 +779,92 @@ input[type='checkbox'] {
   padding: 0;
 }
 
+.result-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .result {
-  padding: 12px;
-  margin-top: 8px;
+  padding: 12px 14px 10px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
 }
 
 .result__title {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 12px;
   align-items: baseline;
 }
 
-.result__title strong {
-  font-family: var(--font-heading);
-  font-weight: 700;
+.result__name {
+  color: var(--text);
+  font-size: var(--fs-title);
+  font-weight: 600;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.result__aside {
+  color: var(--muted);
+  font-size: var(--fs-meta);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .match-list {
-  margin: 8px 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
+  margin: 10px 0 4px;
 }
 
 .match-list__location {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 3px;
   color: var(--muted);
+  font-size: var(--fs-meta);
+  font-weight: 500;
+}
+
+.match-list__more {
+  color: var(--muted);
+  font-size: var(--fs-meta);
 }
 
 .snippet {
   display: block;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 12px;
-  overflow-wrap: anywhere;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  line-height: 1.5;
+  /* Break long tokens only when they must, so code doesn't split mid-word at every line. */
+  overflow-wrap: break-word;
   quotes: none;
 }
 
 mark {
+  padding: 0 1px;
+  border-radius: 2px;
   background: var(--mark);
   color: inherit;
-  border-radius: 2px;
 }
 
-.badge {
-  padding: 1px 8px;
-  border-radius: var(--pill);
-  background: var(--primary-soft);
-  color: var(--primary);
-  font-size: 12px;
-  font-weight: 700;
+@media (forced-colors: active) {
+  mark {
+    background: Mark;
+    color: MarkText;
+  }
 }
 
-.tag {
-  padding: 0 6px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
+/* ── Tooltip ───────────────────────────────────────────────────────────────────────────────────────────────── */
 
-.tag--published {
-  background: var(--primary-soft);
-  color: var(--primary);
-}
-
-.tag--draft {
-  background: var(--warning-soft);
-  color: var(--warning);
-}
-
-.actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-/* Tooltip: shown on hover or keyboard focus; styled like MUI's (background.tooltip). */
+/* Shown on hover or keyboard focus; styled like MUI's (background.tooltip). Hoverable, and Escape dismisses it. */
 .tooltip {
   position: relative;
   display: inline-flex;
@@ -416,16 +878,22 @@ mark {
   width: max-content;
   max-width: 240px;
   padding: 6px 8px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   background: var(--tooltip-bg);
   color: var(--tooltip-text);
-  font-size: 12px;
+  font-size: var(--fs-meta);
   font-weight: 500;
   line-height: 1.35;
-  pointer-events: none;
   opacity: 0;
   visibility: hidden;
   transition: opacity 120ms ease-in;
+}
+
+/* Bridges the gap between the trigger and the bubble, so the pointer can move onto it. */
+.tooltip__bubble::before {
+  content: '';
+  position: absolute;
+  inset: 100% 0 -6px;
 }
 
 .tooltip:hover .tooltip__bubble,
@@ -435,88 +903,100 @@ mark {
   transition-delay: 300ms;
 }
 
+.tooltip[data-dismissed] .tooltip__bubble {
+  opacity: 0;
+  visibility: hidden;
+  transition: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tooltip__bubble {
     transition: none;
   }
 }
 
-/* Compare versions */
-.compare-form {
-  margin-top: 16px;
-}
-
-.compare-form__name {
-  font-family: var(--font-heading);
-}
-
-.results__header:has(.results__actions) {
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.results__actions {
-  display: flex;
-  gap: 8px;
-}
-
-details.result > summary {
-  cursor: pointer;
-}
-
-.change-list {
-  list-style: none;
-  margin: 8px 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.change__path {
-  font-size: 12px;
-  font-weight: 600;
-  overflow-wrap: anywhere;
-}
-
-.change__value {
+/* A notice that expands (e.g. items that couldn't be searched). The summary row holds the icon and a chevron. */
+.notice--details {
   display: block;
-  max-height: 160px;
-  margin-top: 4px;
-  padding: 4px 8px;
-  overflow: auto;
-  border-radius: 4px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 12px;
-  text-decoration: none;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
 }
 
-.change__value--before {
-  background: var(--danger-soft);
+.notice--details > summary {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) 12px;
+  column-gap: 10px;
+  align-items: start;
 }
 
-.change__value--after {
-  background: var(--success-soft);
+.notice--details > summary::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  margin: 5px 3px 0;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  opacity: 0.7;
 }
 
-.tag--added {
-  background: var(--success-soft);
-  color: var(--success);
+.notice--details[open] > summary::after {
+  margin-top: 8px;
+  transform: rotate(225deg);
 }
 
-.tag--removed {
-  background: var(--danger-soft);
-  color: var(--danger);
+.notice--details > :not(summary) {
+  margin-left: 26px;
 }
 
-.tag--changed {
-  background: var(--warning-soft);
-  color: var(--warning);
+.notice__footer {
+  margin-top: 8px;
 }
 
-.tag--moved {
-  background: var(--primary-soft);
-  color: var(--primary);
+/* Items a search couldn't read: name, then why, right-aligned. */
+.notice ul.item-errors {
+  margin-top: 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.item-error {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 12px;
+  padding: 4px 0;
+  border-top: 1px solid var(--divider);
+}
+
+.item-error__reason {
+  color: var(--muted);
+  font-size: var(--fs-meta);
+}
+
+/* Very narrow (200% zoom): the count goes under the title instead of squeezing it letter by letter. */
+@media (max-width: 259px) {
+  .results__header {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .results__actions {
+    margin: 0 0 0 -6px;
+  }
+
+  .result__title {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .result__aside {
+    white-space: normal;
+  }
+
+  .actions .button--text {
+    white-space: normal;
+    text-align: left;
+  }
+}
+
+.notice:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }

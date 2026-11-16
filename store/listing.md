@@ -8,7 +8,7 @@ Droplet Admin Extension
 
 ## Summary (≤132 characters)
 
-Search text across your Droplet forms and datasets, and find any object by its ID, from a side panel.
+Find text across your Droplet forms and datasets, look up any ID, and compare form versions, from a side panel.
 
 ## Description
 

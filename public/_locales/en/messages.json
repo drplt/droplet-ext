@@ -7,7 +7,7 @@
     "message": "Droplet Admin"
   },
   "extDescription": {
-    "message": "Search text across your Droplet forms and datasets, and find any object by its ID, from a side panel.",
+    "message": "Find text across your Droplet forms and datasets, look up any ID, and compare form versions, from a side panel.",
     "description": "Store / manifest description (max 132 chars)."
   },
   "actionTitle": {
@@ -34,20 +34,14 @@
   "searchTextLabel": {
     "message": "Text to find"
   },
-  "searchTextPlaceholder": {
-    "message": "e.g. patient name"
-  },
   "searchButton": {
     "message": "Search"
   },
   "includeDraftsLabel": {
     "message": "Include unpublished drafts"
   },
-  "includeDraftsHint": {
-    "message": "Also searches each item's newest draft, alongside its published version."
-  },
   "idLabel": {
-    "message": "Object ID"
+    "message": "ID"
   },
   "idPlaceholder": {
     "message": "e.g. Yrobox or 12345"
@@ -56,7 +50,7 @@
     "message": "Find"
   },
   "cancelButton": {
-    "message": "Cancel"
+    "message": "Stop"
   },
   "clearButton": {
     "message": "Clear results"
@@ -72,31 +66,27 @@
       }
     }
   },
-  "preparing": {
-    "message": "Gathering objects…"
-  },
   "lookingUp": {
-    "message": "Checking every object type…"
-  },
-  "resultsSummary": {
-    "message": "Found in $COUNT$ of $TOTAL$",
+    "message": "Checking $TYPES$…",
     "placeholders": {
-      "count": {
+      "types": {
         "content": "$1"
-      },
-      "total": {
-        "content": "$2"
       }
     }
   },
   "noTextMatches": {
-    "message": "No matches found."
-  },
-  "noIdMatches": {
-    "message": "No object with that ID was found."
+    "message": "No $ITEMS$ contain “$QUERY$”.",
+    "placeholders": {
+      "items": {
+        "content": "$1"
+      },
+      "query": {
+        "content": "$2"
+      }
+    }
   },
   "cancelled": {
-    "message": "Search cancelled. Showing results found so far."
+    "message": "Search stopped before it finished."
   },
   "matchCount": {
     "message": "$COUNT$ matches",
@@ -107,7 +97,7 @@
     }
   },
   "moreMatches": {
-    "message": "+ $COUNT$ more",
+    "message": "+ $COUNT$ more matches",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -120,34 +110,18 @@
   "versionDraft": {
     "message": "Draft"
   },
-  "versionTitle": {
-    "message": "Version $VERSION$",
-    "placeholders": {
-      "version": {
-        "content": "$1"
-      }
-    }
-  },
   "itemErrors": {
-    "message": "$COUNT$ could not be searched",
+    "message": "$ITEMS$ couldn’t be searched",
     "placeholders": {
-      "count": {
+      "items": {
         "content": "$1"
       }
     }
   },
   "skippedUnpublished": {
-    "message": "$COUNT$ never published, so not searched. Turn on “Include unpublished drafts” to include them.",
+    "message": "$ITEMS$ have never been published, so they weren’t searched. Turn on “Include unpublished drafts” to search their drafts.",
     "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "forbiddenTypes": {
-    "message": "You don't have access to check: $TYPES$",
-    "placeholders": {
-      "types": {
+      "items": {
         "content": "$1"
       }
     }
@@ -155,14 +129,8 @@
   "actionShow": {
     "message": "Show"
   },
-  "actionShowTitle": {
-    "message": "Highlight it on this page, or go to it in this tab"
-  },
-  "actionShowNewTabTitle": {
-    "message": "A search is running in this tab, so this opens a new tab"
-  },
   "actionShowUnavailable": {
-    "message": "Can't show this here — switch to the $PAGE$ page, or use “Open in new tab”.",
+    "message": "Switch to the $PAGE$ page to show this here.",
     "placeholders": {
       "page": {
         "content": "$1"
@@ -215,7 +183,7 @@
     "message": "e.g. Yrobox"
   },
   "compareLoadButton": {
-    "message": "Load"
+    "message": "Load versions"
   },
   "compareLoading": {
     "message": "Loading versions…"
@@ -233,7 +201,7 @@
     "message": "Choose two different versions."
   },
   "compareOneVersion": {
-    "message": "This form has only one version, so there is nothing to compare."
+    "message": "This form has only one version, so there’s nothing to compare yet."
   },
   "comparing": {
     "message": "Comparing versions…"
@@ -249,11 +217,8 @@
       }
     }
   },
-  "compareIdentical": {
-    "message": "These two versions are identical."
-  },
   "compareUnchanged": {
-    "message": "No changes in: $FIELDS$",
+    "message": "No changes in $FIELDS$.",
     "placeholders": {
       "fields": {
         "content": "$1"
@@ -261,7 +226,7 @@
     }
   },
   "compareTextMode": {
-    "message": "This document's structure couldn't be read, so it was compared line by line."
+    "message": "This section couldn’t be read as structured data, so it was compared line by line."
   },
   "changeCount": {
     "message": "$COUNT$ changes",
@@ -304,8 +269,50 @@
   "reportDownloadCsv": {
     "message": "Download CSV"
   },
-  "reportUnavailable": {
-    "message": "This comparison is no longer available. Run it again from the Droplet side panel."
+  "reportModifiedOn": {
+    "message": "Modified $DATE$",
+    "placeholders": {
+      "date": {
+        "content": "$1"
+      }
+    }
+  },
+  "reportCompared": {
+    "message": "Compared"
+  },
+  "reportSectionsLabel": {
+    "message": "Changes by section"
+  },
+  "reportCsvStarted": {
+    "message": "Downloading $FILE$",
+    "placeholders": {
+      "file": {
+        "content": "$1"
+      }
+    }
+  },
+  "reportDocumentTitle": {
+    "message": "$FORM$, $FROM$ to $TO$",
+    "placeholders": {
+      "form": {
+        "content": "$1"
+      },
+      "from": {
+        "content": "$2"
+      },
+      "to": {
+        "content": "$3"
+      }
+    }
+  },
+  "reportMissingTitle": {
+    "message": "This comparison isn’t available"
+  },
+  "reportMissingBody": {
+    "message": "A comparison lasts until its Droplet tab closes, its results are cleared, or another search, lookup, or comparison starts in that tab. Run the comparison again from the Droplet Admin side panel."
+  },
+  "reportClose": {
+    "message": "Close window"
   },
   "fieldLayout": {
     "message": "Layout"
@@ -337,20 +344,8 @@
   "reportTitle": {
     "message": "Form version comparison"
   },
-  "reportForm": {
-    "message": "Form"
-  },
   "reportFormId": {
     "message": "Form ID"
-  },
-  "reportVersion": {
-    "message": "Version"
-  },
-  "reportStatus": {
-    "message": "Status"
-  },
-  "reportModified": {
-    "message": "Last modified"
   },
   "reportSection": {
     "message": "Section"
@@ -361,12 +356,6 @@
   "reportWhere": {
     "message": "Where"
   },
-  "reportSummary": {
-    "message": "Summary"
-  },
-  "reportNoChanges": {
-    "message": "No changes"
-  },
   "versionLocked": {
     "message": "Locked"
   },
@@ -374,30 +363,424 @@
     "message": "Open Droplet to get started"
   },
   "notOnDropletBody": {
-    "message": "The Droplet Admin Extension works on the Droplet web app. Switch to a Droplet tab, or open one now."
+    "message": "These tools work in the Droplet web app. Switch to a Droplet tab, or open one."
   },
   "openDroplet": {
     "message": "Open Droplet"
   },
   "errorNotDroplet": {
-    "message": "This tab isn't showing Droplet."
+    "message": "This tab isn’t showing Droplet."
   },
   "errorReloadTab": {
-    "message": "Reload this Droplet tab, then try again."
+    "message": "The extension can’t reach this tab yet. Save any open work, then reload the tab."
   },
   "errorPageReloaded": {
     "message": "The page reloaded, which stopped the search. Run it again to continue."
   },
   "errorUnauthorized": {
-    "message": "Your Droplet session has ended. Sign in again in this tab, then retry."
+    "message": "Your Droplet session has ended. Sign in again in this tab, then try again."
   },
   "errorForbidden": {
-    "message": "Your Droplet role doesn't allow this. Ask an administrator for Build access."
+    "message": "Your Droplet role doesn’t allow this. Ask an admin for access."
   },
   "errorNetwork": {
-    "message": "Could not reach Droplet. Check your connection and try again."
+    "message": "Couldn’t reach Droplet. Check your connection and try again."
   },
   "errorUnexpected": {
-    "message": "Something went wrong. Please try again."
+    "message": "Something went wrong. Try again. If it keeps happening, save any open work and reload the Droplet tab."
+  },
+  "compareFormIdHint": {
+    "message": "Open a form in Droplet, or paste a form ID."
+  },
+  "compareVersionCount": {
+    "message": "$COUNT$ versions",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "compareReversed": {
+    "message": "The old version is newer, so changes will show reversed."
+  },
+  "compareSwap": {
+    "message": "Swap"
+  },
+  "compareStale": {
+    "message": "Showing the previous comparison. Compare again to see $FROM$ → $TO$.",
+    "placeholders": {
+      "from": {
+        "content": "$1"
+      },
+      "to": {
+        "content": "$2"
+      }
+    }
+  },
+  "compareStaleForm": {
+    "message": "Showing the previous comparison, of $FORM$.",
+    "placeholders": {
+      "form": {
+        "content": "$1"
+      }
+    }
+  },
+  "compareNoChanges": {
+    "message": "No changes"
+  },
+  "compareIgnored": {
+    "message": "Differences in formatting, key order, and workflow canvas position don’t count as changes."
+  },
+  "compareCancelled": {
+    "message": "Comparison stopped."
+  },
+  "tabRunning": {
+    "message": "(running)"
+  },
+  "searchTextPlaceholderForms": {
+    "message": "e.g. Guardian phone"
+  },
+  "searchTextPlaceholderDatasets": {
+    "message": "e.g. Lincoln Elementary"
+  },
+  "idHint": {
+    "message": "Works for $TYPES$. Numeric IDs also check $NUMERIC$.",
+    "placeholders": {
+      "types": {
+        "content": "$1"
+      },
+      "numeric": {
+        "content": "$2"
+      }
+    }
+  },
+  "preparingForms": {
+    "message": "Listing forms…"
+  },
+  "preparingDatasets": {
+    "message": "Listing datasets…"
+  },
+  "countNoun": {
+    "message": "$COUNT$ $NOUN$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "noun": {
+        "content": "$2"
+      }
+    }
+  },
+  "resultsFor": {
+    "message": "“$QUERY$” in $TARGET$",
+    "placeholders": {
+      "query": {
+        "content": "$1"
+      },
+      "target": {
+        "content": "$2"
+      }
+    }
+  },
+  "resultsFound": {
+    "message": "Found in $COUNT$ of $TOTAL$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "resultsFoundPartial": {
+    "message": "Found in $COUNT$ of $TOTAL$ searched",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "resultsSearched": {
+    "message": "Searched $TOTAL$",
+    "placeholders": {
+      "total": {
+        "content": "$1"
+      }
+    }
+  },
+  "summarySkipped": {
+    "message": "$COUNT$ never published",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "summaryFailed": {
+    "message": "$COUNT$ couldn’t be searched",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "staleResults": {
+    "message": "Showing results for the previous search. Search again to update them."
+  },
+  "showOpensNewTab": {
+    "message": "While this search runs, Show opens a new tab so the search keeps going."
+  },
+  "noTextMatchesDrafts": {
+    "message": "Drafts weren’t searched."
+  },
+  "matchCountOne": {
+    "message": "1 match"
+  },
+  "versionTag": {
+    "message": "$STATUS$ · $VERSION$",
+    "placeholders": {
+      "status": {
+        "content": "$1"
+      },
+      "version": {
+        "content": "$2"
+      }
+    }
+  },
+  "itemErrorNoAccess": {
+    "message": "No access"
+  },
+  "skippedUnpublishedOne": {
+    "message": "$ITEMS$ has never been published, so it wasn’t searched. Turn on “Include unpublished drafts” to search its draft.",
+    "placeholders": {
+      "items": {
+        "content": "$1"
+      }
+    }
+  },
+  "idFoundOne": {
+    "message": "Matches one $TYPE$: $NAME$.",
+    "placeholders": {
+      "type": {
+        "content": "$1"
+      },
+      "name": {
+        "content": "$2"
+      }
+    }
+  },
+  "idMatchesMany": {
+    "message": "Matches $COUNT$ things. IDs are only unique within a type.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "idUncheckedAlso": {
+    "message": "Your role can’t look up $TYPES$, so this ID might also match one of those.",
+    "placeholders": {
+      "types": {
+        "content": "$1"
+      }
+    }
+  },
+  "idNotFound": {
+    "message": "No $TYPES$ has this ID.",
+    "placeholders": {
+      "types": {
+        "content": "$1"
+      }
+    }
+  },
+  "idNotFoundPartial": {
+    "message": "Nothing you can see has this ID. Your role can’t look up $TYPES$, so it could still be one of those.",
+    "placeholders": {
+      "types": {
+        "content": "$1"
+      }
+    }
+  },
+  "actionNoLink": {
+    "message": "Droplet doesn’t have a page to open for this one."
+  },
+  "nounForm": {
+    "message": "form"
+  },
+  "nounForms": {
+    "message": "forms"
+  },
+  "nounDataset": {
+    "message": "dataset"
+  },
+  "nounDatasets": {
+    "message": "datasets"
+  },
+  "nounSubmission": {
+    "message": "submission"
+  },
+  "nounSubmissions": {
+    "message": "submissions"
+  },
+  "nounEsignTemplate": {
+    "message": "eSign template"
+  },
+  "nounEsignTemplates": {
+    "message": "eSign templates"
+  },
+  "nounEsignSubmission": {
+    "message": "eSign submission"
+  },
+  "nounEsignSubmissions": {
+    "message": "eSign submissions"
+  },
+  "nounPacketTemplate": {
+    "message": "packet template"
+  },
+  "nounPacketTemplates": {
+    "message": "packet templates"
+  },
+  "otherJobRunningFindText": {
+    "message": "A text search is running in this tab. Wait for it to finish, or stop it, to use this tool."
+  },
+  "otherJobRunningFindById": {
+    "message": "An ID lookup is running in this tab. Wait for it to finish, or stop it, to use this tool."
+  },
+  "otherJobRunningCompare": {
+    "message": "A comparison is running in this tab. Wait for it to finish, or stop it, to use this tool."
+  },
+  "otherJobGoTo": {
+    "message": "Go to $TOOL$",
+    "placeholders": {
+      "tool": {
+        "content": "$1"
+      }
+    }
+  },
+  "otherJobReplaces": {
+    "message": "Starting here replaces your $TOOL$ results.",
+    "placeholders": {
+      "tool": {
+        "content": "$1"
+      }
+    }
+  },
+  "announceSearching": {
+    "message": "Searching $ITEMS$ for “$QUERY$”…",
+    "placeholders": {
+      "items": {
+        "content": "$1"
+      },
+      "query": {
+        "content": "$2"
+      }
+    }
+  },
+  "announceComparing": {
+    "message": "Comparing $FROM$ with $TO$…",
+    "placeholders": {
+      "from": {
+        "content": "$1"
+      },
+      "to": {
+        "content": "$2"
+      }
+    }
+  },
+  "reloadTabButton": {
+    "message": "Reload tab"
+  },
+  "errorForbiddenFormList": {
+    "message": "Your Droplet role can’t view forms. Ask an admin for View access to forms."
+  },
+  "errorForbiddenFormRead": {
+    "message": "Your Droplet role can’t open form versions. Ask an admin for Build access to forms."
+  },
+  "errorForbiddenDatasets": {
+    "message": "Your Droplet role can’t read datasets. Ask an admin for access to datasets."
+  },
+  "idResultsHeading": {
+    "message": "Results"
+  },
+  "idStaleResults": {
+    "message": "Showing results for $ID$. Press Find to look up the new ID.",
+    "placeholders": {
+      "id": {
+        "content": "$1"
+      }
+    }
+  },
+  "compareRefresh": {
+    "message": "Refresh"
+  },
+  "compareRefreshing": {
+    "message": "Refreshing…"
+  },
+  "compareUpdated": {
+    "message": "Updated just now"
+  },
+  "compareRefreshFailed": {
+    "message": "Couldn’t refresh the version list, so it may be out of date."
+  },
+  "compareVersionsChanged": {
+    "message": "The version list changed, so your choices were reset to published → newest."
+  },
+  "compareVersionsChangedNewest": {
+    "message": "The version list changed, so your choices were reset to the two newest."
+  },
+  "reloadingTab": {
+    "message": "Reloading…"
+  },
+  "dismissButton": {
+    "message": "Dismiss"
+  },
+  "reloadedFindText": {
+    "message": "Tab reloaded. Search again."
+  },
+  "reloadedFindById": {
+    "message": "Tab reloaded. Find the ID again."
+  },
+  "reloadedCompare": {
+    "message": "Tab reloaded. Compare again."
+  },
+  "includeDraftsHintForms": {
+    "message": "Also searches newer drafts, and forms that were never published."
+  },
+  "includeDraftsHintDatasets": {
+    "message": "Also searches newer drafts, and datasets that were never published."
+  },
+  "skippedNoVersions": {
+    "message": "$ITEMS$ have no published version or draft, so they weren’t searched.",
+    "placeholders": {
+      "items": {
+        "content": "$1"
+      }
+    }
+  },
+  "skippedNoVersionsOne": {
+    "message": "$ITEMS$ has no published version or draft, so it wasn’t searched.",
+    "placeholders": {
+      "items": {
+        "content": "$1"
+      }
+    }
+  },
+  "summaryNothingToSearch": {
+    "message": "$COUNT$ with nothing to search",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "compareRefreshFailedShort": {
+    "message": "Couldn’t refresh the version list."
+  },
+  "compareListUpdated": {
+    "message": "Version list updated."
   }
 }
