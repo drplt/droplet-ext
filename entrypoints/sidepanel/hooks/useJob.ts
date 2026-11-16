@@ -15,7 +15,8 @@ const useJob = (tabId: null | number) => {
     job: null,
     tabId: null,
   });
-  const current = state.tabId === tabId ? state : { error: null, job: null };
+  const synced = state.tabId === tabId;
+  const current = synced ? state : { error: null, job: null };
 
   // Opens (or re-opens) the port to the background and subscribes to this tab's job. Returns the new port.
   const connectRef = useRef<(() => Browser.runtime.Port) | null>(null);
@@ -82,7 +83,13 @@ const useJob = (tabId: null | number) => {
     if (tabId !== null) send({ type: 'clear', tabId });
   }, [send, tabId]);
 
-  return { cancel, clear, error: current.error, job: current.job, start };
+  // `synced`: the background has sent this tab's state at least once, so `job: null` really means "no job".
+  // Hides a panel-level error (e.g. "Something went wrong") without touching the job.
+  const dismissError = useCallback(() => {
+    setState(previous => (previous.error === null ? previous : { ...previous, error: null }));
+  }, []);
+
+  return { cancel, clear, dismissError, error: current.error, job: current.job, start, synced };
 };
 
 export { useJob };

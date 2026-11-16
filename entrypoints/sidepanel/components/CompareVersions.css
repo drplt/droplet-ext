@@ -1,0 +1,330 @@
+/* Compare versions (side panel). Shared tokens, buttons, notices, tags and result cards live in ../style.css. */
+
+.compare {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Results and progress sit a little further from the form than its own parts do. */
+.compare > .results {
+  margin-top: 4px;
+}
+
+.compare > .status {
+  margin-top: 0;
+}
+
+.field__aside {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* ── Version picker ────────────────────────────────────────────────────────────────────────────────────────── */
+
+.compare-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.compare-picker__name {
+  padding: 0;
+  color: var(--text);
+  font-size: var(--fs-title);
+  font-weight: 600;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.compare-picker__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 6px;
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--fs-meta);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Refresh sits in the meta line, so it takes the line's size rather than a button's. */
+.compare-picker__meta .button--text {
+  min-height: 24px;
+  padding: 2px 6px;
+  font-size: var(--fs-meta);
+}
+
+.compare-picker__meta .button--text[aria-disabled='true'] {
+  color: var(--muted);
+  cursor: default;
+}
+
+.compare-picker__note {
+  margin-top: -10px;
+}
+
+.compare-picker select {
+  font-variant-numeric: tabular-nums;
+}
+
+.compare-picker__hint {
+  margin-top: -4px;
+}
+
+/* The reversed-order hint: the sentence wraps in its own column, Swap stays on the right. */
+.compare-picker__hint:has(.button--text) {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.compare-picker__hint .button--text {
+  flex: none;
+  min-height: 0;
+  padding: 2px 6px;
+  margin: -2px -6px -2px 0;
+  font-size: inherit;
+  vertical-align: baseline;
+}
+
+.compare-picker > .button {
+  margin-top: 4px;
+}
+
+/* While the results already answer the selection, Compare versions steps back to a normal-width secondary button. */
+.compare-picker > .button--secondary {
+  align-self: flex-start;
+}
+
+/* "Starting here replaces your … results", right under the button it's about. */
+.compare-picker > .button + .hint {
+  margin-top: -4px;
+}
+
+/* ── Results ───────────────────────────────────────────────────────────────────────────────────────────────── */
+
+.compare .results__heading {
+  font: inherit;
+}
+
+/* One card per section. The whole header row is the disclosure's hit area. */
+.compare-field {
+  padding: 0;
+}
+
+.compare-field__summary {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr) auto;
+  column-gap: 8px;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  list-style: none;
+  cursor: pointer;
+}
+
+.compare-field__summary::-webkit-details-marker {
+  display: none;
+}
+
+.compare-field__summary:focus-visible {
+  outline-offset: -2px;
+}
+
+.compare-field__summary:hover .compare-field__chevron {
+  color: var(--text);
+}
+
+.compare-field__chevron {
+  color: var(--muted);
+  transition: transform 120ms ease-out;
+}
+
+.compare-field[open] .compare-field__chevron {
+  transform: rotate(90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .compare-field__chevron {
+    transition: none;
+  }
+}
+
+.compare-field__note {
+  padding: 0 14px;
+  margin: -4px 0 4px;
+}
+
+.change-list {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  row-gap: 14px;
+  margin: 0;
+  padding: 4px 14px 14px;
+  list-style: none;
+}
+
+/*
+ * Tag, then the path with a hanging indent; the values run the full width underneath. Rows share the list's columns,
+ * so every path in a section starts at the same x.
+ */
+.change {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  column-gap: 8px;
+  row-gap: 6px;
+  align-items: baseline;
+}
+
+.change > .tag {
+  justify-self: start;
+}
+
+.change__path {
+  color: var(--muted);
+  font-size: var(--fs-label);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.change__leaf {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.change__values {
+  display: grid;
+  grid-column: 1 / -1;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+}
+
+/* A fixed label column (in em, so it scales with zoom) keeps the code aligned whether a row has one value or two. */
+.change__value {
+  display: grid;
+  grid-template-columns: 3.75em minmax(0, 1fr);
+  column-gap: 10px;
+  font-size: var(--fs-tag);
+  padding: 5px 10px;
+}
+
+/* Tint plus a solid rule on the left edge, so the pair still reads apart where the dark tints are faint. */
+.change__value--before {
+  background: var(--danger-soft);
+  box-shadow: inset 2px 0 0 var(--danger);
+}
+
+.change__value--after {
+  background: var(--success-soft);
+  box-shadow: inset 2px 0 0 var(--success);
+}
+
+.change__label {
+  color: var(--muted);
+  font-weight: 600;
+  line-height: 18px;
+}
+
+.change__code {
+  max-height: 160px;
+  overflow: auto;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  line-height: 18px;
+  text-decoration: none;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+@media (forced-colors: active) {
+  .change__values {
+    border: 1px solid CanvasText;
+  }
+
+  .change__value + .change__value {
+    border-top: 1px solid CanvasText;
+  }
+}
+
+.compare-identical {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px;
+}
+
+.compare-unchanged {
+  margin-top: 4px;
+}
+
+/* A squeezed panel: give the code a little more room. */
+@media (max-width: 320px) {
+  .compare-field__summary,
+  .change-list {
+    padding-inline: 12px;
+  }
+
+  .compare-field__note {
+    padding-inline: 12px;
+  }
+
+  .change__value {
+    column-gap: 8px;
+    padding-inline: 8px;
+  }
+}
+
+.compare-nowrap {
+  white-space: nowrap;
+}
+
+/* 200% zoom on a 360px panel: actions go under the heading, and the section count under its name. */
+@media (max-width: 259px) {
+  .compare .results__header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+  }
+
+  .compare .results__actions {
+    flex-wrap: wrap;
+    margin: 0 0 0 -6px;
+  }
+
+  .compare-field__summary {
+    grid-template-columns: 12px minmax(0, 1fr);
+  }
+
+  .compare-field__summary .result__aside {
+    grid-column: 2;
+  }
+
+  .change__path {
+    grid-column: 1 / -1;
+  }
+
+  .compare-picker > .button {
+    align-self: stretch;
+    padding-inline: 12px;
+    white-space: normal;
+  }
+
+  /* The label sits above its code, so the code gets the full width. */
+  .change__value {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .compare-field__summary,
+  .change-list,
+  .compare-field__note {
+    padding-inline: 10px;
+  }
+}

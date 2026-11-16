@@ -21,6 +21,7 @@ const getMessage = (key: string, substitutions?: (number | string)[] | string) =
 beforeEach(() => {
   fakeBrowser.reset();
   vi.spyOn(fakeBrowser.i18n, 'getMessage').mockImplementation(getMessage);
+  vi.spyOn(fakeBrowser.i18n, 'getUILanguage').mockReturnValue('en');
 });
 
 afterEach(() => {

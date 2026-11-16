@@ -1,4 +1,4 @@
-import type { ContentMessage, FormVersionsReply } from '@/lib/messages';
+import type { ContentMessage, FormVersionsReply, JobState } from '@/lib/messages';
 import type { ObjectRef } from '@/lib/routes';
 
 import { getDropletEnv } from '@/lib/env';
@@ -53,4 +53,23 @@ const openReport = (tab: ActiveTab) =>
     height: 800,
   });
 
-export { loadFormVersions, openInNewTab, openReport, showObject, urlFor };
+/**
+ * Reloads the Droplet tab, which loads the extension's content script into it. Only ever called from a button the user
+ * presses: a reload can discard unsaved work in the form builder. `tabs.reload` needs no extra permission.
+ */
+// Async so a synchronous throw from the browser API surfaces as a rejection the caller's .catch() handles.
+const reloadTab = async (tabId: number) => {
+  await browser.tabs.reload(tabId);
+};
+
+/**
+ * Whether a failure is the background's "no content script in this tab", whose fix is reloading the tab. The
+ * background reports it as a plain message (kind 'other'), so this is the one place that recognises it.
+ */
+const needsReload = (message: string) => message === t('errorReloadTab');
+
+/** A job that failed only because the extension couldn't reach the tab. Reloading makes it obsolete. */
+const isUnreachableJob = (job: JobState | null): job is JobState =>
+  job?.status === 'error' && job.error?.kind === 'other' && needsReload(job.error.message);
+
+export { isUnreachableJob, loadFormVersions, needsReload, openInNewTab, openReport, reloadTab, showObject, urlFor };
