@@ -14,12 +14,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v6.1.1
+      # No dependency cache: release artifacts shouldn't be built from a cache another run could have written.
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version-file: .nvmrc
-          cache: pnpm
+          package-manager-cache: false
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
