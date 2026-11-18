@@ -21,11 +21,11 @@
     "zip:all": "pnpm zip && pnpm zip:firefox",
     "zip:internal": "wxt zip --mode internal && wxt zip -b firefox --mode internal",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "lint:firefox": "web-ext lint --source-dir .output/firefox-mv3 --self-hosted=false",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -39,7 +39,6 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.10",
@@ -48,17 +47,13 @@
     "@types/react-dom": "^19.3.0",
     "@vitest/coverage-v8": "^5.1.0",
     "@wxt-dev/module-react": "^1.2.2",
-    "eslint": "^10.14.0",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-perfectionist": "^5.13.0",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "globals": "^17.14.0",
     "jsdom": "^31.0.1",
     "lint-staged": "^17.6.0",
-    "prettier": "^3.10.1",
+    "oxfmt": "^0.79.0",
+    "oxlint": "^1.94.0",
+    "oxlint-tsgolint": "^7.0.2007",
     "simple-git-hooks": "^2.14.0",
-    "typescript": "~6.0.3",
-    "typescript-eslint": "^8.72.2",
+    "typescript": "~7.0.2",
     "vite": "^8.3.8",
     "vitest": "^5.1.0",
     "web-ext": "^10.8.0",
@@ -69,16 +64,9 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
+      "oxlint --fix",
+      "oxfmt --no-error-on-unmatched-pattern"
     ],
-    "*.{json,md,yml,yaml,css,html}": "prettier --write"
-  },
-  "pnpm": {
-    "peerDependencyRules": {
-      "allowedVersions": {
-        "eslint-plugin-jsx-a11y>eslint": "10"
-      }
-    }
+    "*.{json,md,yml,yaml,css,html}": "oxfmt --no-error-on-unmatched-pattern"
   }
 }

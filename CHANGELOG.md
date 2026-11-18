@@ -6,6 +6,10 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+### Changed
+
+- Tooling: replaced ESLint and Prettier with Oxlint (type-aware) and Oxfmt, and upgraded TypeScript to 7.0.
+
 ### Fixed
 
 - The AMO sources zip no longer includes the `coverage/` report left behind by `pnpm test:coverage`.

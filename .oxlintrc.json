@@ -1,0 +1,180 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["eslint", "typescript", "unicorn", "oxc", "react", "jsx-a11y"],
+  "categories": { "correctness": "error" },
+  "options": { "typeAware": true },
+  "env": { "builtin": true, "browser": true, "webextensions": true },
+  "ignorePatterns": [".output/**", ".wxt/**", "coverage/**"],
+  "rules": {
+    // ESLint recommended rules outside oxlint's correctness category.
+    "no-array-constructor": "error",
+    "no-case-declarations": "error",
+    "no-empty": "error",
+    "no-empty-function": "error",
+    "no-fallthrough": "error",
+    "no-prototype-builtins": "error",
+    "no-regex-spaces": "error",
+    "no-unexpected-multiline": "error",
+    "no-useless-assignment": "error",
+    "no-useless-constructor": "error",
+    "no-var": "error",
+    "prefer-const": "error",
+    "prefer-rest-params": "error",
+    "prefer-spread": "error",
+    "preserve-caught-error": "error",
+
+    // typescript-eslint strictTypeChecked + stylisticTypeChecked.
+    "typescript/adjacent-overload-signatures": "error",
+    "typescript/array-type": "error",
+    "typescript/ban-ts-comment": ["error", { "minimumDescriptionLength": 10 }],
+    "typescript/ban-tslint-comment": "error",
+    "typescript/class-literal-property-style": "error",
+    "typescript/consistent-generic-constructors": "error",
+    "typescript/consistent-indexed-object-style": "error",
+    "typescript/consistent-type-assertions": "error",
+    "typescript/dot-notation": "error",
+    "typescript/no-confusing-non-null-assertion": "error",
+    "typescript/no-confusing-void-expression": "error",
+    "typescript/no-deprecated": "error",
+    "typescript/no-dynamic-delete": "error",
+    "typescript/no-empty-object-type": "error",
+    "typescript/no-explicit-any": "error",
+    "typescript/no-extraneous-class": "error",
+    "typescript/no-generated-empty-object-type": "error",
+    "typescript/no-inferrable-types": "error",
+    "typescript/no-invalid-void-type": "error",
+    "typescript/no-misused-promises": "error",
+    "typescript/no-mixed-enums": "error",
+    "typescript/no-namespace": "error",
+    "typescript/no-non-null-asserted-nullish-coalescing": "error",
+    "typescript/no-non-null-assertion": "error",
+    "typescript/no-require-imports": "error",
+    "typescript/no-unnecessary-boolean-literal-compare": "error",
+    "typescript/no-unnecessary-condition": "error",
+    "typescript/no-unnecessary-template-expression": "error",
+    "typescript/no-unnecessary-type-arguments": "error",
+    "typescript/no-unnecessary-type-assertion": "error",
+    "typescript/no-unnecessary-type-constraint": "error",
+    "typescript/no-unnecessary-type-conversion": "error",
+    "typescript/no-unnecessary-type-parameters": "error",
+    "typescript/no-unsafe-argument": "error",
+    "typescript/no-unsafe-assignment": "error",
+    "typescript/no-unsafe-call": "error",
+    "typescript/no-unsafe-enum-assignment": "error",
+    "typescript/no-unsafe-enum-comparison": "error",
+    "typescript/no-unsafe-function-type": "error",
+    "typescript/no-unsafe-member-access": "error",
+    "typescript/no-unsafe-return": "error",
+    "typescript/non-nullable-type-assertion-style": "error",
+    "typescript/only-throw-error": "error",
+    "typescript/prefer-find": "error",
+    "typescript/prefer-for-of": "error",
+    "typescript/prefer-function-type": "error",
+    "typescript/prefer-includes": "error",
+    "typescript/prefer-literal-enum-member": "error",
+    "typescript/prefer-nullish-coalescing": "error",
+    "typescript/prefer-optional-chain": "error",
+    "typescript/prefer-promise-reject-errors": "error",
+    "typescript/prefer-reduce-type-parameter": "error",
+    "typescript/prefer-regexp-exec": "error",
+    "typescript/prefer-return-this-type": "error",
+    "typescript/prefer-string-starts-ends-with": "error",
+    "typescript/related-getter-setter-pairs": "error",
+    "typescript/require-await": "error",
+    "typescript/restrict-plus-operands": [
+      "error",
+      {
+        "allowAny": false,
+        "allowBoolean": false,
+        "allowNullish": false,
+        "allowNumberAndString": false,
+        "allowRegExp": false
+      }
+    ],
+    "typescript/return-await": ["error", "error-handling-correctness-only"],
+    "typescript/unified-signatures": "error",
+    "typescript/use-unknown-in-catch-callback-variable": "error",
+
+    // jsx-a11y recommended rules outside the correctness category.
+    "jsx-a11y/control-has-associated-label": "off",
+    // `role="status"` on a paragraph is the standard live region; `<output>` is meant for form results.
+    "jsx-a11y/prefer-tag-over-role": "off",
+    "jsx-a11y/interactive-supports-focus": [
+      "error",
+      { "tabbable": ["button", "checkbox", "link", "searchbox", "spinbutton", "switch", "textbox"] }
+    ],
+    "jsx-a11y/no-interactive-element-to-noninteractive-role": [
+      "error",
+      { "tr": ["none", "presentation"], "canvas": ["img"] }
+    ],
+    "jsx-a11y/no-noninteractive-element-interactions": [
+      "error",
+      {
+        "handlers": ["onClick", "onError", "onLoad", "onMouseDown", "onMouseUp", "onKeyPress", "onKeyDown", "onKeyUp"],
+        "alert": ["onKeyUp", "onKeyDown", "onKeyPress"],
+        "body": ["onError", "onLoad"],
+        "dialog": ["onKeyUp", "onKeyDown", "onKeyPress"],
+        "iframe": ["onError", "onLoad"],
+        "img": ["onError", "onLoad"]
+      }
+    ],
+    "jsx-a11y/no-noninteractive-element-to-interactive-role": [
+      "error",
+      {
+        "ul": ["listbox", "menu", "menubar", "radiogroup", "tablist", "tree", "treegrid"],
+        "ol": ["listbox", "menu", "menubar", "radiogroup", "tablist", "tree", "treegrid"],
+        "li": ["menuitem", "menuitemradio", "menuitemcheckbox", "option", "row", "tab", "treeitem"],
+        "table": ["grid"],
+        "td": ["gridcell"],
+        "fieldset": ["radiogroup", "presentation"]
+      }
+    ],
+    "jsx-a11y/no-noninteractive-tabindex": [
+      "error",
+      { "tags": [], "roles": ["tabpanel"], "allowExpressionValues": true }
+    ],
+    "jsx-a11y/no-static-element-interactions": [
+      "error",
+      {
+        "allowExpressionValues": true,
+        "handlers": ["onClick", "onMouseDown", "onMouseUp", "onKeyPress", "onKeyDown", "onKeyUp"]
+      }
+    ],
+
+    // React hooks recommended rules outside the correctness category.
+    "react/exhaustive-deps": "warn",
+    "react/incompatible-library": "warn",
+    "react/rules-of-hooks": "error",
+    "react/unsupported-syntax": "warn",
+
+    // House style shared with the drplt monorepo. Oxfmt sorts import declarations; this sorts the names inside them.
+    "sort-imports": ["error", { "ignoreDeclarationSort": true, "ignoreCase": true }],
+    "typescript/consistent-type-definitions": ["error", "type"],
+    "typescript/consistent-type-imports": ["error", { "fixStyle": "separate-type-imports" }],
+    "typescript/restrict-template-expressions": ["error", { "allowNumber": true }],
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+    "eqeqeq": ["error", "always", { "null": "ignore" }],
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    // Never build DOM from strings: results contain customer data.
+    "no-restricted-properties": [
+      "error",
+      { "property": "innerHTML", "message": "Use DOM APIs or React; never assign HTML strings." },
+      { "property": "outerHTML", "message": "Use DOM APIs or React; never assign HTML strings." },
+      { "property": "insertAdjacentHTML", "message": "Use DOM APIs or React; never assign HTML strings." }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["**/*.test.{ts,tsx}", "test/**"],
+      "rules": {
+        "typescript/no-non-null-assertion": "off",
+        "typescript/no-unsafe-assignment": "off",
+        "typescript/no-unsafe-member-access": "off"
+      }
+    },
+    {
+      "files": ["*.config.ts"],
+      "env": { "node": true }
+    }
+  ]
+}

@@ -57,9 +57,9 @@ Dev mode also enables the internal environments: `demo1`, `dev1`, `dr1` and `sta
 | `pnpm zip:internal`                                    | Zips of the internal build (works on demo1/dev1/stage/local) for sharing with testers; never upload these to a store |
 | `pnpm check`                                           | lint + format check + typecheck + tests (what CI runs)                                                               |
 | `pnpm test` / `pnpm test:watch` / `pnpm test:coverage` | Vitest                                                                                                               |
-| `pnpm lint` / `pnpm lint:fix`                          | ESLint (type-aware, React hooks, a11y, import sorting)                                                               |
+| `pnpm lint` / `pnpm lint:fix`                          | Oxlint (type-aware, React hooks, a11y)                                                                               |
 | `pnpm lint:firefox`                                    | `web-ext lint` on the Firefox build                                                                                  |
-| `pnpm format`                                          | Prettier                                                                                                             |
+| `pnpm format`                                          | Oxfmt (formatting and import sorting)                                                                                |
 
 ## How it works
 
@@ -161,10 +161,10 @@ There is no `cookies` permission, no `tabs` permission, no remote code and no an
 
 - **TypeScript** in strict mode with `noUncheckedIndexedAccess`.
 - **Style:** prefer `type` over `interface`; use named `export { … }` blocks. Both follow the drplt monorepo.
-- **Lint and format:** ESLint `strictTypeChecked`, `jsx-a11y`, `react-hooks`, and `perfectionist` import sorting. Prettier settings match drplt.
+- **Lint and format:** Oxlint with type-aware rules matching typescript-eslint `strictTypeChecked`, plus `jsx-a11y` and React hooks. Oxfmt formats and sorts imports with settings that match drplt.
 - **No HTML from strings.** Results contain customer data. Lint bans `innerHTML` and `insertAdjacentHTML`, and snippets are rendered as text nodes.
 - **Translated strings.** Every user-facing string goes through `t()` (`lib/i18n.ts`). Keys are type-checked against `messages.json`.
-- **Pre-commit hook.** `simple-git-hooks` + `lint-staged` run ESLint and Prettier on staged files.
+- **Pre-commit hook.** `simple-git-hooks` + `lint-staged` run Oxlint and Oxfmt on staged files.
 - **GitHub Actions.** Every action is locked to a commit in `.github/workflows/actions.lock` ([workflow lockfiles](https://docs.github.com/actions/concepts/security/workflow-dependency-lockfiles)). After adding a workflow or changing a `uses:` line, run `gh actions-lock` (install it with `gh extension install github/gh-actions-lock`) and commit the lockfile. Changes under `.github/` also run actionlint, zizmor and `gh actions-lock --verify` in CI.
 
 ## Releasing
