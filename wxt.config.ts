@@ -50,4 +50,8 @@ export default defineConfig({
   webExt: {
     startUrls: ['https://app.droplet.io/forms'],
   },
+  zip: {
+    // CI runs `test:coverage` before `zip:all`; the coverage report isn't source and doesn't belong in the AMO zip.
+    excludeSources: ['coverage/**'],
+  },
 });
