@@ -6,6 +6,10 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+### Fixed
+
+- The AMO sources zip no longer includes the `coverage/` report left behind by `pnpm test:coverage`.
+
 ## [0.2.0] - 2026-11-16
 
 ### Changed
