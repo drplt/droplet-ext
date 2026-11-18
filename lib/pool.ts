@@ -12,7 +12,7 @@ const mapPool = async <Item, Result>(
 ): Promise<Result[]> => {
   if (concurrency < 1) throw new RangeError('concurrency must be at least 1');
 
-  const results = new Array<Result>(items.length);
+  const results = Array.from<Result>({ length: items.length });
   let next = 0;
 
   const run = async () => {

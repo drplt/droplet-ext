@@ -33,7 +33,7 @@ const useActiveTab = () => {
     let disposed = false;
     const refresh = (loadedTabId: null | number = null) => {
       void queryActiveTab().then(next => {
-        if (!disposed) setTab(previous => withLoadedAt(previous, next, next !== null && next.id === loadedTabId));
+        if (!disposed) setTab(previous => withLoadedAt(previous, next, next?.id === loadedTabId));
       });
     };
     const onActivated = () => {

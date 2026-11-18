@@ -40,9 +40,9 @@ const FORM_VERSION_FIELDS = [
 ] as const;
 
 // `include=` selects exactly which fields the API returns; only request (and declare) what's read.
-const formVersion = z.looseObject({
-  ...Object.fromEntries(FORM_VERSION_FIELDS.map(field => [field, z.unknown().optional()])),
-});
+const formVersion = z.looseObject(
+  Object.fromEntries(FORM_VERSION_FIELDS.map(field => [field, z.unknown().optional()])),
+);
 
 const datasetVersion = z.looseObject({
   data: z.unknown().optional(),

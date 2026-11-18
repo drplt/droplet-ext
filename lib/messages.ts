@@ -66,7 +66,8 @@ type PanelCommand =
 
 /** Background → side panel, over the "panel" port. */
 type PanelUpdate =
-  { job: JobState | null; tabId: number; type: 'state' } | { message: string; tabId: number; type: 'error' };
+  | { job: JobState | null; tabId: number; type: 'state' }
+  | { message: string; tabId: number; type: 'error' };
 
 const PANEL_PORT = 'panel';
 

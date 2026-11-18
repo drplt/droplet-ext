@@ -7,7 +7,7 @@ updates:
     open-pull-requests-limit: 10
     groups:
       lint:
-        patterns: ['eslint*', '@eslint/*', 'typescript-eslint', 'prettier', 'globals']
+        patterns: ['oxlint', 'oxlint-tsgolint', 'oxfmt']
       test:
         patterns: ['vitest', '@vitest/*', '@testing-library/*', 'jsdom']
       react:

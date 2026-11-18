@@ -9,7 +9,10 @@ type Selection = { from: string; to: string };
 
 /** A re-read of a list that's already showing. Only a refresh the user asked for shows its progress. */
 type Refresh =
-  { manual: boolean; status: 'running' } | { status: 'failed' } | { status: 'idle' } | { status: 'updated' };
+  | { manual: boolean; status: 'running' }
+  | { status: 'failed' }
+  | { status: 'idle' }
+  | { status: 'updated' };
 
 type Versions =
   | { error: JobFailure; formId: string; status: 'failed' }
