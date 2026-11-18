@@ -1,0 +1,63 @@
+name: Actions security
+
+# Lints workflows and Dependabot config, and checks the action lockfile, whenever anything under .github changes.
+on:
+  push:
+    branches: [main]
+    paths: ['.github/**']
+  pull_request:
+    paths: ['.github/**']
+
+concurrency:
+  group: actions-security-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  actionlint:
+    name: actionlint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      # Container images aren't covered by actions.lock, so this one is pinned by digest.
+      - uses: docker://rhysd/actionlint:1.7.12@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667
+        with:
+          args: -color
+
+  zizmor:
+    name: zizmor
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      # Fails the job on findings instead of uploading SARIF to code scanning.
+      - uses: zizmorcore/zizmor-action@v0.8.1
+        with:
+          advanced-security: false
+          version: 1.32.0
+
+  lockfile:
+    name: Verify actions.lock
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - run: gh extension install github/gh-actions-lock --pin v0.4.1
+      # Fails when actions.lock is out of sync with the workflows or a locked commit no longer verifies upstream.
+      - run: gh actions-lock --verify

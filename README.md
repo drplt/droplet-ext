@@ -165,6 +165,7 @@ There is no `cookies` permission, no `tabs` permission, no remote code and no an
 - **No HTML from strings.** Results contain customer data. Lint bans `innerHTML` and `insertAdjacentHTML`, and snippets are rendered as text nodes.
 - **Translated strings.** Every user-facing string goes through `t()` (`lib/i18n.ts`). Keys are type-checked against `messages.json`.
 - **Pre-commit hook.** `simple-git-hooks` + `lint-staged` run ESLint and Prettier on staged files.
+- **GitHub Actions.** Every action is locked to a commit in `.github/workflows/actions.lock` ([workflow lockfiles](https://docs.github.com/actions/concepts/security/workflow-dependency-lockfiles)). After adding a workflow or changing a `uses:` line, run `gh actions-lock` (install it with `gh extension install github/gh-actions-lock`) and commit the lockfile. Changes under `.github/` also run actionlint, zizmor and `gh actions-lock --verify` in CI.
 
 ## Releasing
 
